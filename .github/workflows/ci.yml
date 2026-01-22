@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - Criar_Oportunidade_de_voluntariado_Promotor
+      - '*'
   pull_request:
     types: [opened, synchronize, reopened]
 
