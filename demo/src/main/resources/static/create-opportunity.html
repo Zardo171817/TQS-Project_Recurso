@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Oportunidade - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Início</a></li>
+                <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/create-opportunity.html" class="active">Criar Oportunidade</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="form-container">
+            <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Criar Nova Oportunidade</h2>
+
+            <div id="messageContainer"></div>
+
+            <form id="opportunityForm">
+                <div class="form-group">
+                    <label for="promoterId">Promotor *</label>
+                    <select id="promoterId" name="promoterId" required>
+                        <option value="">Selecione um promotor</option>
+                    </select>
+                    <span class="error-message" id="promoterIdError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Título *</label>
+                    <input type="text" id="title" name="title" required
+                           minlength="3" maxlength="200"
+                           placeholder="Ex: Ajuda na organização de evento comunitário">
+                    <span class="error-message" id="titleError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descrição *</label>
+                    <textarea id="description" name="description" required
+                              minlength="10" maxlength="1000"
+                              placeholder="Descreva detalhadamente a oportunidade de voluntariado"></textarea>
+                    <span class="error-message" id="descriptionError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Habilidades Necessárias *</label>
+                    <input type="text" id="skills" name="skills" required
+                           placeholder="Ex: Comunicação, Organização, Trabalho em equipe">
+                    <span class="error-message" id="skillsError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="duration">Duração (dias) *</label>
+                    <input type="number" id="duration" name="duration" required
+                           min="1" max="365"
+                           placeholder="Ex: 7">
+                    <span class="error-message" id="durationError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="vacancies">Número de Vagas *</label>
+                    <input type="number" id="vacancies" name="vacancies" required
+                           min="1" max="1000"
+                           placeholder="Ex: 10">
+                    <span class="error-message" id="vacanciesError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="points">Pontos de Recompensa *</label>
+                    <input type="number" id="points" name="points" required
+                           min="0" max="10000"
+                           placeholder="Ex: 100">
+                    <span class="error-message" id="pointsError"></span>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        Criar Oportunidade
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="resetBtn">
+                        Limpar Formulário
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/create-opportunity.js"></script>
+</body>
+</html>
