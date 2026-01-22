@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oportunidades - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Início</a></li>
+                <li><a href="/opportunities.html" class="active">Oportunidades</a></li>
+                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Oportunidades de Voluntariado</h2>
+
+        <div class="filters">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="filterPromoter">Filtrar por Promotor:</label>
+                    <select id="filterPromoter" class="form-control">
+                        <option value="">Todos os Promotores</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button id="clearFilters" class="btn btn-secondary">Limpar Filtros</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="messageContainer"></div>
+        <div id="loadingIndicator" class="loading">Carregando oportunidades...</div>
+        <div id="opportunitiesContainer" class="opportunities-grid"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/opportunities.js"></script>
+</body>
+</html>
