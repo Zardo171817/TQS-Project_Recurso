@@ -1,7 +1,13 @@
 package com.example.demo.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateOpportunityRequest {
 
     @NotBlank(message = "Title is required")
@@ -30,74 +36,4 @@ public class CreateOpportunityRequest {
 
     @NotNull(message = "Promoter ID is required")
     private Long promoterId;
-
-    public CreateOpportunityRequest() {
-    }
-
-    public CreateOpportunityRequest(String title, String description, String skills, Integer duration,
-                                    Integer vacancies, Integer points, Long promoterId) {
-        this.title = title;
-        this.description = description;
-        this.skills = skills;
-        this.duration = duration;
-        this.vacancies = vacancies;
-        this.points = points;
-        this.promoterId = promoterId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getSkills() {
-        return skills;
-    }
-
-    public void setSkills(String skills) {
-        this.skills = skills;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-
-    public Integer getVacancies() {
-        return vacancies;
-    }
-
-    public void setVacancies(Integer vacancies) {
-        this.vacancies = vacancies;
-    }
-
-    public Integer getPoints() {
-        return points;
-    }
-
-    public void setPoints(Integer points) {
-        this.points = points;
-    }
-
-    public Long getPromoterId() {
-        return promoterId;
-    }
-
-    public void setPromoterId(Long promoterId) {
-        this.promoterId = promoterId;
-    }
 }
