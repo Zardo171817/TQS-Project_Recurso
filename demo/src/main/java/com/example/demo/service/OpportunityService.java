@@ -1,12 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.CreateOpportunityRequest;
+import com.example.demo.dto.OpportunityFilterRequest;
 import com.example.demo.dto.OpportunityResponse;
 import com.example.demo.entity.Opportunity;
 import com.example.demo.entity.Promoter;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.OpportunityRepository;
 import com.example.demo.repository.PromoterRepository;
+import com.example.demo.specification.OpportunitySpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,7 @@ public class OpportunityService {
         opportunity.setTitle(request.getTitle());
         opportunity.setDescription(request.getDescription());
         opportunity.setSkills(request.getSkills());
+        opportunity.setCategory(request.getCategory());
         opportunity.setDuration(request.getDuration());
         opportunity.setVacancies(request.getVacancies());
         opportunity.setPoints(request.getPoints());
@@ -66,5 +70,38 @@ public class OpportunityService {
         return opportunityRepository.findByPromoterId(promoterId).stream()
                 .map(OpportunityResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<OpportunityResponse> filterOpportunities(OpportunityFilterRequest filter) {
+        Specification<Opportunity> spec = OpportunitySpecification.withFilters(
+                filter.getCategory(),
+                filter.getSkills(),
+                filter.getMinDuration(),
+                filter.getMaxDuration()
+        );
+
+        return opportunityRepository.findAll(spec).stream()
+                .map(OpportunityResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<OpportunityResponse> filterOpportunitiesByParams(String category, String skills, Integer minDuration, Integer maxDuration) {
+        Specification<Opportunity> spec = OpportunitySpecification.withFilters(
+                category,
+                skills,
+                minDuration,
+                maxDuration
+        );
+
+        return opportunityRepository.findAll(spec).stream()
+                .map(OpportunityResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getAllCategories() {
+        return opportunityRepository.findAllCategories();
     }
 }

@@ -46,4 +46,21 @@ public class OpportunityController {
                 opportunityService.getOpportunitiesByPromoter(promoterId);
         return ResponseEntity.ok(opportunities);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<OpportunityResponse>> filterOpportunities(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String skills,
+            @RequestParam(required = false) Integer minDuration,
+            @RequestParam(required = false) Integer maxDuration) {
+        List<OpportunityResponse> opportunities =
+                opportunityService.filterOpportunitiesByParams(category, skills, minDuration, maxDuration);
+        return ResponseEntity.ok(opportunities);
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getAllCategories() {
+        List<String> categories = opportunityService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
 }

@@ -11,8 +11,9 @@
         <div class="container">
             <h1 class="logo">Voluntariado Marketplace</h1>
             <ul class="nav-links">
-                <li><a href="/index.html">Início</a></li>
+                <li><a href="/index.html">Inicio</a></li>
                 <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/volunteer-opportunities.html">Buscar Oportunidades</a></li>
                 <li><a href="/create-opportunity.html" class="active">Criar Oportunidade</a></li>
             </ul>
         </div>
@@ -54,6 +55,23 @@
                     <input type="text" id="skills" name="skills" required
                            placeholder="Ex: Comunicação, Organização, Trabalho em equipe">
                     <span class="error-message" id="skillsError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Categoria *</label>
+                    <select id="category" name="category" required>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="Educação">Educação</option>
+                        <option value="Saúde">Saúde</option>
+                        <option value="Meio Ambiente">Meio Ambiente</option>
+                        <option value="Assistência Social">Assistência Social</option>
+                        <option value="Cultura e Arte">Cultura e Arte</option>
+                        <option value="Esporte">Esporte</option>
+                        <option value="Animais">Animais</option>
+                        <option value="Tecnologia">Tecnologia</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                    <span class="error-message" id="categoryError"></span>
                 </div>
 
                 <div class="form-group">

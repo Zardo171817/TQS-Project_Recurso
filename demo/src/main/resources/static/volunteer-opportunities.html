@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oportunidades para Voluntários - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Inicio</a></li>
+                <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/volunteer-opportunities.html" class="active">Buscar Oportunidades</a></li>
+                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Encontrar Oportunidades de Voluntariado</h2>
+
+        <div class="filters">
+            <h3 style="margin-bottom: 1rem; color: #2c3e50;">Filtrar Oportunidades</h3>
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="filterCategory">Categoria:</label>
+                    <select id="filterCategory" class="form-control">
+                        <option value="">Todas as Categorias</option>
+                        <option value="Educação">Educacao</option>
+                        <option value="Saúde">Saude</option>
+                        <option value="Meio Ambiente">Meio Ambiente</option>
+                        <option value="Assistência Social">Assistencia Social</option>
+                        <option value="Cultura e Arte">Cultura e Arte</option>
+                        <option value="Esporte">Esporte</option>
+                        <option value="Animais">Animais</option>
+                        <option value="Tecnologia">Tecnologia</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterSkills">Competencias:</label>
+                    <input type="text" id="filterSkills" class="form-control"
+                           placeholder="Ex: Java, Comunicacao...">
+                </div>
+            </div>
+            <div class="filters-row" style="margin-top: 1rem;">
+                <div class="filter-group">
+                    <label for="filterMinDuration">Duracao Minima (dias):</label>
+                    <input type="number" id="filterMinDuration" class="form-control"
+                           min="1" placeholder="Ex: 1">
+                </div>
+                <div class="filter-group">
+                    <label for="filterMaxDuration">Duracao Maxima (dias):</label>
+                    <input type="number" id="filterMaxDuration" class="form-control"
+                           min="1" placeholder="Ex: 30">
+                </div>
+                <div class="filter-group filter-buttons">
+                    <button id="applyFilters" class="btn btn-primary">Aplicar Filtros</button>
+                    <button id="clearFilters" class="btn btn-secondary">Limpar Filtros</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsInfo" class="results-info" style="margin: 1rem 0; color: #7f8c8d;"></div>
+        <div id="messageContainer"></div>
+        <div id="loadingIndicator" class="loading">Carregando oportunidades...</div>
+        <div id="opportunitiesContainer" class="opportunities-grid"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/volunteer-opportunities.js"></script>
+</body>
+</html>

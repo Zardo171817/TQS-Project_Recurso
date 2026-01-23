@@ -344,6 +344,64 @@ footer {
     margin-bottom: 1.5rem;
 }
 
+/* Category Badge */
+.category-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: #3498db;
+    color: white;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.opportunity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.opportunity-header h3 {
+    margin: 0;
+    flex: 1;
+}
+
+/* Filter Buttons */
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+}
+
+/* Results Info */
+.results-info {
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+}
+
+/* Meta Icon */
+.meta-icon {
+    font-size: 1rem;
+}
+
+/* Form Control Enhancement */
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .navbar .container {

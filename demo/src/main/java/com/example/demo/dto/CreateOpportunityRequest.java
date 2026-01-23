@@ -22,6 +22,10 @@ public class CreateOpportunityRequest {
     @Size(min = 3, max = 200, message = "Skills must be between 3 and 200 characters")
     private String skills;
 
+    @NotBlank(message = "Category is required")
+    @Size(min = 3, max = 100, message = "Category must be between 3 and 100 characters")
+    private String category;
+
     @NotNull(message = "Duration is required")
     @Positive(message = "Duration must be positive")
     private Integer duration;

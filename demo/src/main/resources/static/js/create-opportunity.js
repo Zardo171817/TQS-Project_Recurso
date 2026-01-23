@@ -159,6 +159,7 @@ async function handleSubmit(event) {
             title: formData.get('title'),
             description: formData.get('description'),
             skills: formData.get('skills'),
+            category: formData.get('category'),
             duration: parseInt(formData.get('duration')),
             vacancies: parseInt(formData.get('vacancies')),
             points: parseInt(formData.get('points')),
