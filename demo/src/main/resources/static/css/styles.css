@@ -402,6 +402,151 @@ footer {
     border-color: #3498db;
 }
 
+/* Opportunity Details Page */
+.opportunity-details-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.opportunity-details-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.opportunity-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.opportunity-details-header h2 {
+    color: #2c3e50;
+    margin: 0;
+    flex: 1;
+    font-size: 1.8rem;
+}
+
+.opportunity-details-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.meta-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.meta-card .meta-icon {
+    font-size: 1.5rem;
+}
+
+.meta-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-label {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    text-transform: uppercase;
+}
+
+.meta-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.opportunity-details-section {
+    margin-bottom: 2rem;
+}
+
+.opportunity-details-section h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ecf0f1;
+}
+
+.opportunity-details-section p {
+    color: #555;
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.skill-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #3498db;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.promoter-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.promoter-details {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+.promoter-details .meta-icon {
+    font-size: 1.5rem;
+}
+
+.opportunity-details-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ecf0f1;
+    color: #95a5a6;
+    font-size: 0.9rem;
+}
+
+.opportunity-actions {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.back-link a {
+    text-decoration: none;
+}
+
+/* View Details Button in Cards */
+.opportunity-card .btn-details {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .navbar .container {

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Oportunidade - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Inicio</a></li>
+                <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/volunteer-opportunities.html">Buscar Oportunidades</a></li>
+                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="back-link" style="margin-bottom: 1.5rem;">
+            <a href="/volunteer-opportunities.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                &#8592; Voltar para Oportunidades
+            </a>
+        </div>
+
+        <div id="messageContainer"></div>
+        <div id="loadingIndicator" class="loading">Carregando detalhes da oportunidade...</div>
+
+        <div id="opportunityDetails" class="opportunity-details-container" style="display: none;">
+            <div class="opportunity-details-card">
+                <div class="opportunity-details-header">
+                    <h2 id="opportunityTitle"></h2>
+                    <span id="opportunityCategory" class="category-badge"></span>
+                </div>
+
+                <div class="opportunity-details-meta">
+                    <div class="meta-card">
+                        <span class="meta-icon">&#9201;</span>
+                        <div class="meta-content">
+                            <span class="meta-label">Duracao</span>
+                            <span id="opportunityDuration" class="meta-value"></span>
+                        </div>
+                    </div>
+                    <div class="meta-card">
+                        <span class="meta-icon">&#128101;</span>
+                        <div class="meta-content">
+                            <span class="meta-label">Vagas Disponiveis</span>
+                            <span id="opportunityVacancies" class="meta-value"></span>
+                        </div>
+                    </div>
+                    <div class="meta-card">
+                        <span class="meta-icon">&#11088;</span>
+                        <div class="meta-content">
+                            <span class="meta-label">Pontos</span>
+                            <span id="opportunityPoints" class="meta-value"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="opportunity-details-section">
+                    <h3>Descricao</h3>
+                    <p id="opportunityDescription"></p>
+                </div>
+
+                <div class="opportunity-details-section">
+                    <h3>Competencias Necessarias</h3>
+                    <div id="opportunitySkills" class="skills-container"></div>
+                </div>
+
+                <div class="opportunity-details-section promoter-section">
+                    <h3>Informacoes do Promotor</h3>
+                    <div class="promoter-details">
+                        <span class="meta-icon">&#128100;</span>
+                        <span id="opportunityPromoter"></span>
+                    </div>
+                </div>
+
+                <div class="opportunity-details-footer">
+                    <span id="opportunityCreatedAt"></span>
+                </div>
+
+                <div class="opportunity-actions">
+                    <button id="applyButton" class="btn btn-primary btn-large">
+                        Candidatar-me a esta Oportunidade
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/opportunity-details.js"></script>
+</body>
+</html>

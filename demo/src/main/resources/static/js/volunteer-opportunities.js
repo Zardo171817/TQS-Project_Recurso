@@ -208,6 +208,10 @@ function displayOpportunities(opportunities) {
             <div class="opportunity-footer" style="margin-top: 1rem; color: #95a5a6; font-size: 0.85rem;">
                 Criada em: ${formatDate(opportunity.createdAt)}
             </div>
+
+            <a href="/opportunity-details.html?id=${opportunity.id}" class="btn btn-primary btn-details">
+                Ver Detalhes
+            </a>
         </div>
     `).join('');
 }
