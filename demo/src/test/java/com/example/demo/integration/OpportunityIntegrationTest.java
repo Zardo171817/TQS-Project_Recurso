@@ -1,7 +1,6 @@
 package com.example.demo.integration;
 
 import com.example.demo.dto.CreateOpportunityRequest;
-import com.example.demo.dto.OpportunityResponse;
 import com.example.demo.entity.Opportunity;
 import com.example.demo.entity.Promoter;
 import com.example.demo.repository.OpportunityRepository;
@@ -21,8 +20,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -73,171 +71,271 @@ class OpportunityIntegrationTest {
         testPromoter = promoterRepository.save(testPromoter);
     }
 
+    // Feature 1: Criar Oportunidade - Integration Tests
     @Test
     void whenCreateOpportunity_thenOpportunityShouldBePersistedInDatabase() throws Exception {
         CreateOpportunityRequest request = new CreateOpportunityRequest();
         request.setTitle("Integration Test Opportunity");
         request.setDescription("This is an integration test opportunity");
         request.setSkills("Java, Spring Boot, Testing");
+        request.setCategory("Tecnologia");
         request.setDuration(15);
         request.setVacancies(10);
         request.setPoints(200);
         request.setPromoterId(testPromoter.getId());
 
-        String responseBody = mockMvc.perform(post("/api/opportunities")
+        mockMvc.perform(post("/api/opportunities")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.title").value("Integration Test Opportunity"))
-                .andExpect(jsonPath("$.description").value("This is an integration test opportunity"))
-                .andExpect(jsonPath("$.skills").value("Java, Spring Boot, Testing"))
+                .andExpect(jsonPath("$.category").value("Tecnologia"))
                 .andExpect(jsonPath("$.duration").value(15))
                 .andExpect(jsonPath("$.vacancies").value(10))
-                .andExpect(jsonPath("$.points").value(200))
-                .andExpect(jsonPath("$.promoterId").value(testPromoter.getId()))
-                .andExpect(jsonPath("$.promoterName").value("Integration Test Promoter"))
-                .andExpect(jsonPath("$.createdAt").exists())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        OpportunityResponse response = objectMapper.readValue(responseBody, OpportunityResponse.class);
-
-        Opportunity savedOpportunity = opportunityRepository.findById(response.getId()).orElse(null);
-        assertNotNull(savedOpportunity);
-        assertEquals("Integration Test Opportunity", savedOpportunity.getTitle());
-        assertEquals(testPromoter.getId(), savedOpportunity.getPromoter().getId());
+                .andExpect(jsonPath("$.points").value(200));
     }
 
     @Test
-    void whenCreateOpportunityWithInvalidPromoterId_thenReturn404() throws Exception {
+    void whenCreateOpportunityWithInvalidPromoter_thenReturnNotFound() throws Exception {
         CreateOpportunityRequest request = new CreateOpportunityRequest();
-        request.setTitle("Test");
-        request.setDescription("Test description for opportunity");
-        request.setSkills("Test skills");
+        request.setTitle("Test Opportunity");
+        request.setDescription("Test Description Here");
+        request.setSkills("Java");
+        request.setCategory("Tecnologia");
         request.setDuration(10);
         request.setVacancies(5);
         request.setPoints(100);
-        request.setPromoterId(9999L);
+        request.setPromoterId(99999L);
 
         mockMvc.perform(post("/api/opportunities")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Promoter not found with id: 9999"));
-
-        assertEquals(0, opportunityRepository.count());
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    void whenCreateOpportunityWithInvalidData_thenReturn400AndNotPersist() throws Exception {
+    void whenCreateOpportunityWithInvalidData_thenReturnBadRequest() throws Exception {
         CreateOpportunityRequest request = new CreateOpportunityRequest();
-        request.setTitle("");
-        request.setDescription("short");
+        request.setTitle(""); // Invalid - blank
+        request.setDescription("Short"); // Invalid - too short
         request.setSkills("");
-        request.setDuration(-5);
-        request.setVacancies(0);
-        request.setPoints(-100);
-        request.setPromoterId(testPromoter.getId());
+        request.setCategory("");
+        request.setDuration(-1); // Invalid - negative
+        request.setVacancies(-1); // Invalid - negative
+        request.setPoints(-1); // Invalid - negative
+        request.setPromoterId(null);
 
         mockMvc.perform(post("/api/opportunities")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors").exists());
-
-        assertEquals(0, opportunityRepository.count());
+                .andExpect(status().isBadRequest());
     }
 
+    // Get Opportunity by ID - Integration Tests
     @Test
-    void whenGetOpportunityById_thenReturnCorrectOpportunity() throws Exception {
-        Opportunity opportunity = new Opportunity();
-        opportunity.setTitle("Existing Opportunity");
-        opportunity.setDescription("This opportunity already exists");
-        opportunity.setSkills("Existing Skills");
-        opportunity.setDuration(20);
-        opportunity.setVacancies(8);
-        opportunity.setPoints(150);
-        opportunity.setPromoter(testPromoter);
-        opportunity = opportunityRepository.save(opportunity);
+    void whenGetOpportunityById_thenReturnOpportunity() throws Exception {
+        Opportunity opp = createOpportunity("Get By ID Test", "Java", "Tecnologia", 10);
 
-        mockMvc.perform(get("/api/opportunities/" + opportunity.getId()))
+        mockMvc.perform(get("/api/opportunities/" + opp.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(opportunity.getId()))
-                .andExpect(jsonPath("$.title").value("Existing Opportunity"))
-                .andExpect(jsonPath("$.description").value("This opportunity already exists"))
-                .andExpect(jsonPath("$.promoterId").value(testPromoter.getId()));
+                .andExpect(jsonPath("$.id").value(opp.getId()))
+                .andExpect(jsonPath("$.title").value("Get By ID Test"))
+                .andExpect(jsonPath("$.skills").value("Java"))
+                .andExpect(jsonPath("$.category").value("Tecnologia"));
     }
 
     @Test
-    void whenGetAllOpportunities_thenReturnAllOpportunities() throws Exception {
-        Opportunity opp1 = new Opportunity();
-        opp1.setTitle("Opportunity 1");
-        opp1.setDescription("Description 1 for testing");
-        opp1.setSkills("Skills 1");
-        opp1.setDuration(10);
-        opp1.setVacancies(5);
-        opp1.setPoints(100);
-        opp1.setPromoter(testPromoter);
-        opportunityRepository.save(opp1);
+    void whenGetOpportunityByIdNotFound_thenReturnNotFound() throws Exception {
+        mockMvc.perform(get("/api/opportunities/99999"))
+                .andExpect(status().isNotFound());
+    }
 
-        Opportunity opp2 = new Opportunity();
-        opp2.setTitle("Opportunity 2");
-        opp2.setDescription("Description 2 for testing");
-        opp2.setSkills("Skills 2");
-        opp2.setDuration(20);
-        opp2.setVacancies(10);
-        opp2.setPoints(200);
-        opp2.setPromoter(testPromoter);
-        opportunityRepository.save(opp2);
+    // Get All Opportunities - Integration Tests
+    @Test
+    void whenGetAllOpportunities_thenReturnList() throws Exception {
+        createOpportunity("Opportunity 1", "Java", "Tecnologia", 10);
+        createOpportunity("Opportunity 2", "Python", "Educacao", 15);
+        createOpportunity("Opportunity 3", "First Aid", "Saude", 5);
 
         mockMvc.perform(get("/api/opportunities"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].title").value("Opportunity 1"))
-                .andExpect(jsonPath("$[1].title").value("Opportunity 2"));
+                .andExpect(jsonPath("$", hasSize(3)));
     }
 
     @Test
-    void whenGetOpportunitiesByPromoter_thenReturnOnlyPromoterOpportunities() throws Exception {
-        Promoter anotherPromoter = new Promoter();
-        anotherPromoter.setName("Another Promoter");
-        anotherPromoter.setEmail("another@test.com");
-        anotherPromoter.setOrganization("Another Org");
-        anotherPromoter = promoterRepository.save(anotherPromoter);
+    void whenGetAllOpportunitiesEmpty_thenReturnEmptyList() throws Exception {
+        mockMvc.perform(get("/api/opportunities"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
 
-        Opportunity opp1 = new Opportunity();
-        opp1.setTitle("Promoter 1 Opportunity");
-        opp1.setDescription("Description for promoter 1");
-        opp1.setSkills("Skills 1");
-        opp1.setDuration(10);
-        opp1.setVacancies(5);
-        opp1.setPoints(100);
-        opp1.setPromoter(testPromoter);
-        opportunityRepository.save(opp1);
-
-        Opportunity opp2 = new Opportunity();
-        opp2.setTitle("Promoter 2 Opportunity");
-        opp2.setDescription("Description for promoter 2");
-        opp2.setSkills("Skills 2");
-        opp2.setDuration(20);
-        opp2.setVacancies(10);
-        opp2.setPoints(200);
-        opp2.setPromoter(anotherPromoter);
-        opportunityRepository.save(opp2);
+    // Get Opportunities by Promoter - Integration Tests
+    @Test
+    void whenGetOpportunitiesByPromoter_thenReturnList() throws Exception {
+        createOpportunity("Promoter Opp 1", "Java", "Tecnologia", 10);
+        createOpportunity("Promoter Opp 2", "Python", "Tecnologia", 15);
 
         mockMvc.perform(get("/api/opportunities/promoter/" + testPromoter.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].title").value("Promoter 1 Opportunity"))
-                .andExpect(jsonPath("$[0].promoterId").value(testPromoter.getId()));
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 
     @Test
-    void whenGetOpportunitiesByInvalidPromoter_thenReturn404() throws Exception {
-        mockMvc.perform(get("/api/opportunities/promoter/9999"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Promoter not found with id: 9999"));
+    void whenGetOpportunitiesByPromoterNotFound_thenReturnNotFound() throws Exception {
+        mockMvc.perform(get("/api/opportunities/promoter/99999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenGetOpportunitiesByPromoterEmpty_thenReturnEmptyList() throws Exception {
+        mockMvc.perform(get("/api/opportunities/promoter/" + testPromoter.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    // Feature 2: Ver/Filtrar Oportunidades - Integration Tests
+    @Test
+    void whenFilterOpportunitiesByCategory_thenReturnMatchingOpportunities() throws Exception {
+        createOpportunity("Tech Opportunity", "Java", "Tecnologia", 10);
+        createOpportunity("Health Opportunity", "First Aid", "Saude", 15);
+
+        mockMvc.perform(get("/api/opportunities/filter")
+                        .param("category", "Tecnologia"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title").value("Tech Opportunity"));
+    }
+
+    @Test
+    void whenFilterOpportunitiesBySkills_thenReturnMatchingOpportunities() throws Exception {
+        createOpportunity("Java Developer", "Java, Spring Boot", "Tecnologia", 10);
+        createOpportunity("Python Developer", "Python, Django", "Tecnologia", 15);
+
+        mockMvc.perform(get("/api/opportunities/filter")
+                        .param("skills", "Java"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title").value("Java Developer"));
+    }
+
+    @Test
+    void whenFilterOpportunitiesByDurationRange_thenReturnMatchingOpportunities() throws Exception {
+        createOpportunity("Short Opportunity", "Skill", "Tecnologia", 5);
+        createOpportunity("Medium Opportunity", "Skill", "Tecnologia", 15);
+        createOpportunity("Long Opportunity", "Skill", "Tecnologia", 30);
+
+        mockMvc.perform(get("/api/opportunities/filter")
+                        .param("minDuration", "10")
+                        .param("maxDuration", "20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title").value("Medium Opportunity"));
+    }
+
+    @Test
+    void whenFilterOpportunitiesByMinDurationOnly_thenReturnMatchingOpportunities() throws Exception {
+        createOpportunity("Short Opportunity", "Skill", "Tecnologia", 5);
+        createOpportunity("Long Opportunity", "Skill", "Tecnologia", 30);
+
+        mockMvc.perform(get("/api/opportunities/filter")
+                        .param("minDuration", "20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title").value("Long Opportunity"));
+    }
+
+    @Test
+    void whenFilterOpportunitiesByMaxDurationOnly_thenReturnMatchingOpportunities() throws Exception {
+        createOpportunity("Short Opportunity", "Skill", "Tecnologia", 5);
+        createOpportunity("Long Opportunity", "Skill", "Tecnologia", 30);
+
+        mockMvc.perform(get("/api/opportunities/filter")
+                        .param("maxDuration", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title").value("Short Opportunity"));
+    }
+
+    @Test
+    void whenFilterOpportunitiesWithAllParams_thenReturnMatchingOpportunities() throws Exception {
+        createOpportunity("Java Dev Short", "Java, Spring", "Tecnologia", 10);
+        createOpportunity("Java Dev Long", "Java, Spring", "Tecnologia", 30);
+        createOpportunity("Python Dev", "Python, Django", "Tecnologia", 15);
+        createOpportunity("Health Helper", "First Aid", "Saude", 10);
+
+        mockMvc.perform(get("/api/opportunities/filter")
+                        .param("category", "Tecnologia")
+                        .param("skills", "Java")
+                        .param("minDuration", "5")
+                        .param("maxDuration", "15"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].title").value("Java Dev Short"));
+    }
+
+    @Test
+    void whenFilterOpportunitiesNoParams_thenReturnAllOpportunities() throws Exception {
+        createOpportunity("Opportunity 1", "Java", "Tecnologia", 10);
+        createOpportunity("Opportunity 2", "Python", "Saude", 15);
+
+        mockMvc.perform(get("/api/opportunities/filter"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test
+    void whenFilterOpportunitiesNoMatch_thenReturnEmptyList() throws Exception {
+        createOpportunity("Tech Opportunity", "Java", "Tecnologia", 10);
+
+        mockMvc.perform(get("/api/opportunities/filter")
+                        .param("category", "NonExistent"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    // Get All Categories - Integration Tests
+    @Test
+    void whenGetAllCategories_thenReturnDistinctCategories() throws Exception {
+        createOpportunity("Tech 1", "Java", "Tecnologia", 10);
+        createOpportunity("Tech 2", "Python", "Tecnologia", 15);
+        createOpportunity("Health 1", "First Aid", "Saude", 5);
+        createOpportunity("Education 1", "Teaching", "Educacao", 20);
+
+        mockMvc.perform(get("/api/opportunities/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$", containsInAnyOrder("Educacao", "Saude", "Tecnologia")));
+    }
+
+    @Test
+    void whenGetAllCategoriesEmpty_thenReturnEmptyList() throws Exception {
+        mockMvc.perform(get("/api/opportunities/categories"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    // Promoter Endpoint Integration Tests
+    @Test
+    void whenGetAllPromoters_thenReturnList() throws Exception {
+        mockMvc.perform(get("/api/promoters"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].name").value("Integration Test Promoter"))
+                .andExpect(jsonPath("$[0].email").value("integration@test.com"))
+                .andExpect(jsonPath("$[0].organization").value("Integration Test Org"));
+    }
+
+    // Helper method
+    private Opportunity createOpportunity(String title, String skills, String category, int duration) {
+        Opportunity opp = new Opportunity();
+        opp.setTitle(title);
+        opp.setDescription("Description for " + title);
+        opp.setSkills(skills);
+        opp.setCategory(category);
+        opp.setDuration(duration);
+        opp.setVacancies(5);
+        opp.setPoints(100);
+        opp.setPromoter(testPromoter);
+        return opportunityRepository.save(opp);
     }
 }

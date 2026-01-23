@@ -16,6 +16,7 @@ public class OpportunityResponse {
     private String title;
     private String description;
     private String skills;
+    private String category;
     private Integer duration;
     private Integer vacancies;
     private Integer points;
@@ -29,6 +30,7 @@ public class OpportunityResponse {
         response.setTitle(opportunity.getTitle());
         response.setDescription(opportunity.getDescription());
         response.setSkills(opportunity.getSkills());
+        response.setCategory(opportunity.getCategory());
         response.setDuration(opportunity.getDuration());
         response.setVacancies(opportunity.getVacancies());
         response.setPoints(opportunity.getPoints());

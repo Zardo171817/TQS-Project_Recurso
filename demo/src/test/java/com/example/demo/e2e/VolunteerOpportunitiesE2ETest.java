@@ -1,5 +1,6 @@
 package com.example.demo.e2e;
 
+import com.example.demo.entity.Opportunity;
 import com.example.demo.entity.Promoter;
 import com.example.demo.repository.OpportunityRepository;
 import com.example.demo.repository.PromoterRepository;
@@ -18,11 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import java.time.Duration;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class OpportunityE2ETest {
+class VolunteerOpportunitiesE2ETest {
 
     @LocalServerPort
     private int port;
@@ -36,6 +38,7 @@ class OpportunityE2ETest {
     private static WebDriver driver;
     private WebDriverWait wait;
     private String baseUrl;
+    private Promoter testPromoter;
 
     @BeforeAll
     static void setupClass() {
@@ -58,11 +61,11 @@ class OpportunityE2ETest {
         opportunityRepository.deleteAll();
         promoterRepository.deleteAll();
 
-        Promoter promoter = new Promoter();
-        promoter.setName("E2E Test Promoter");
-        promoter.setEmail("e2e@test.com");
-        promoter.setOrganization("E2E Org");
-        promoterRepository.save(promoter);
+        testPromoter = new Promoter();
+        testPromoter.setName("E2E Volunteer Test Promoter");
+        testPromoter.setEmail("e2evolunteer@test.com");
+        testPromoter.setOrganization("E2E Volunteer Org");
+        testPromoter = promoterRepository.save(testPromoter);
     }
 
     @AfterEach
@@ -72,41 +75,37 @@ class OpportunityE2ETest {
         }
     }
 
-    // Feature 1: Criar Oportunidade - E2E Test
+    // Feature 2: Ver/Filtrar Oportunidades - E2E Test
     @Test
-    void testCreateOpportunity_withValidData_shouldSucceed() {
-        driver.get(baseUrl + "/create-opportunity.html");
+    void testFilterOpportunitiesByCategory() {
+        createOpportunity("Tech Opportunity", "Java", "Tecnologia", 10);
+        createOpportunity("Health Opportunity", "First Aid", "Saude", 15);
 
-        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
-                By.cssSelector("#promoterId option"), 1
-        ));
+        driver.get(baseUrl + "/volunteer-opportunities.html");
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
+        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("opportunity-card"), 0));
 
-        Select promoterSelect = new Select(driver.findElement(By.id("promoterId")));
-        promoterSelect.selectByIndex(1);
-
-        driver.findElement(By.id("title")).sendKeys("E2E Test Opportunity");
-        driver.findElement(By.id("description")).sendKeys("This is an E2E test opportunity description.");
-        driver.findElement(By.id("skills")).sendKeys("Testing, Selenium");
-
-        Select categorySelect = new Select(driver.findElement(By.id("category")));
+        Select categorySelect = new Select(driver.findElement(By.id("filterCategory")));
         categorySelect.selectByValue("Tecnologia");
-
-        driver.findElement(By.id("duration")).sendKeys("15");
-        driver.findElement(By.id("vacancies")).sendKeys("10");
-        driver.findElement(By.id("points")).sendKeys("200");
-
-        driver.findElement(By.id("submitBtn")).click();
-
-        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        longWait.until(ExpectedConditions.urlContains("opportunities.html"));
+        driver.findElement(By.id("applyFilters")).click();
 
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
 
-        WebElement opportunityCard = wait.until(
-                ExpectedConditions.presenceOfElementLocated(By.className("opportunity-card"))
-        );
+        List<WebElement> cards = driver.findElements(By.className("opportunity-card"));
+        assertEquals(1, cards.size());
+        assertTrue(cards.get(0).getText().contains("Tech Opportunity"));
+    }
 
-        assertTrue(opportunityCard.getText().contains("E2E Test Opportunity"));
-        assertEquals(1, opportunityRepository.count());
+    private void createOpportunity(String title, String skills, String category, int duration) {
+        Opportunity opp = new Opportunity();
+        opp.setTitle(title);
+        opp.setDescription("Description for " + title);
+        opp.setSkills(skills);
+        opp.setCategory(category);
+        opp.setDuration(duration);
+        opp.setVacancies(5);
+        opp.setPoints(100);
+        opp.setPromoter(testPromoter);
+        opportunityRepository.save(opp);
     }
 }

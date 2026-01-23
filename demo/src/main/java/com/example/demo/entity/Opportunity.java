@@ -28,6 +28,9 @@ public class Opportunity {
     private String skills;
 
     @Column(nullable = false)
+    private String category;
+
+    @Column(nullable = false)
     private Integer duration;
 
     @Column(nullable = false)

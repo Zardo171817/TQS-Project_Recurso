@@ -108,17 +108,20 @@ function displayOpportunities(opportunities) {
 
     container.innerHTML = opportunities.map(opportunity => `
         <div class="opportunity-card" data-opportunity-id="${opportunity.id}">
-            <h3>${escapeHtml(opportunity.title)}</h3>
+            <div class="opportunity-header">
+                <h3>${escapeHtml(opportunity.title)}</h3>
+                <span class="category-badge">${escapeHtml(opportunity.category || 'Sem categoria')}</span>
+            </div>
 
             <div class="opportunity-meta">
-                <span class="meta-item" title="Duração">
-                    ⏱️ ${opportunity.duration} dias
+                <span class="meta-item" title="Duracao">
+                    <span class="meta-icon">&#9201;</span> ${opportunity.duration} dias
                 </span>
                 <span class="meta-item" title="Vagas">
-                    👥 ${opportunity.vacancies} vagas
+                    <span class="meta-icon">&#128101;</span> ${opportunity.vacancies} vagas
                 </span>
                 <span class="meta-item" title="Pontos">
-                    ⭐ ${opportunity.points} pontos
+                    <span class="meta-icon">&#11088;</span> ${opportunity.points} pontos
                 </span>
             </div>
 
