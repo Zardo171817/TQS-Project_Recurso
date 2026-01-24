@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidaturas Recebidas - Marketplace de Voluntariado</title>
+    <title>Minhas Candidaturas - Marketplace de Voluntariado</title>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
         .application-card {
@@ -58,19 +58,19 @@
             color: white;
         }
 
-        .volunteer-info {
+        .opportunity-info {
             background: #f8f9fa;
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 1rem;
         }
 
-        .volunteer-info p {
+        .opportunity-info p {
             margin: 0.5rem 0;
             color: #555;
         }
 
-        .volunteer-info strong {
+        .opportunity-info strong {
             color: #2c3e50;
         }
 
@@ -110,12 +110,7 @@
             font-size: 0.85rem;
         }
 
-        .application-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .promoter-select {
+        .volunteer-login {
             background: white;
             padding: 1.5rem;
             border-radius: 10px;
@@ -123,19 +118,21 @@
             margin-bottom: 2rem;
         }
 
-        .promoter-select h3 {
+        .volunteer-login h3 {
             color: #2c3e50;
             margin-bottom: 1rem;
         }
 
-        .promoter-select-row {
+        .volunteer-login-row {
             display: flex;
             gap: 1rem;
             align-items: flex-end;
+            flex-wrap: wrap;
         }
 
-        .promoter-select-row .filter-group {
+        .volunteer-login-row .filter-group {
             flex: 1;
+            min-width: 250px;
         }
 
         .applications-list {
@@ -150,6 +147,55 @@
         .opportunity-link:hover {
             text-decoration: underline;
         }
+
+        .status-summary {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .status-count {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .status-count .count {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .status-count .label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .status-count.pending .count { color: #f39c12; }
+        .status-count.accepted .count { color: #27ae60; }
+        .status-count.rejected .count { color: #e74c3c; }
+        .status-count.total .count { color: #3498db; }
+
+        .volunteer-info-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .volunteer-info-header h3 {
+            margin: 0 0 0.5rem 0;
+        }
+
+        .volunteer-info-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -160,23 +206,21 @@
                 <li><a href="/index.html">Inicio</a></li>
                 <li><a href="/opportunities.html">Oportunidades</a></li>
                 <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
-                <li><a href="/applications.html" class="active">Candidaturas Promotor</a></li>
-                <li><a href="/volunteer-applications.html">Minhas Candidaturas</a></li>
+                <li><a href="/applications.html">Candidaturas Promotor</a></li>
+                <li><a href="/volunteer-applications.html" class="active">Minhas Candidaturas</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="container">
-        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Candidaturas Recebidas</h2>
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Minhas Candidaturas</h2>
 
-        <div class="promoter-select">
-            <h3>Selecione o Promotor</h3>
-            <div class="promoter-select-row">
+        <div class="volunteer-login">
+            <h3>Identificar Voluntario</h3>
+            <div class="volunteer-login-row">
                 <div class="filter-group">
-                    <label for="promoterSelect">Promotor:</label>
-                    <select id="promoterSelect" class="form-control">
-                        <option value="">Selecione um promotor</option>
-                    </select>
+                    <label for="volunteerEmail">Email do Voluntario:</label>
+                    <input type="email" id="volunteerEmail" class="form-control" placeholder="Digite seu email">
                 </div>
                 <div class="filter-group">
                     <label for="statusFilter">Filtrar por Status:</label>
@@ -188,8 +232,32 @@
                     </select>
                 </div>
                 <div class="filter-group filter-buttons">
-                    <button id="loadApplications" class="btn btn-primary">Carregar Candidaturas</button>
+                    <button id="loadApplications" class="btn btn-primary">Ver Candidaturas</button>
                 </div>
+            </div>
+        </div>
+
+        <div id="volunteerInfoHeader" class="volunteer-info-header" style="display: none;">
+            <h3 id="volunteerName"></h3>
+            <p id="volunteerEmailDisplay"></p>
+        </div>
+
+        <div id="statusSummary" class="status-summary" style="display: none;">
+            <div class="status-count total">
+                <span class="count" id="totalCount">0</span>
+                <span class="label">Total</span>
+            </div>
+            <div class="status-count pending">
+                <span class="count" id="pendingCount">0</span>
+                <span class="label">Pendentes</span>
+            </div>
+            <div class="status-count accepted">
+                <span class="count" id="acceptedCount">0</span>
+                <span class="label">Aceites</span>
+            </div>
+            <div class="status-count rejected">
+                <span class="count" id="rejectedCount">0</span>
+                <span class="label">Rejeitadas</span>
             </div>
         </div>
 
@@ -205,6 +273,6 @@
         </div>
     </footer>
 
-    <script src="/js/applications.js"></script>
+    <script src="/js/volunteer-applications.js"></script>
 </body>
 </html>
