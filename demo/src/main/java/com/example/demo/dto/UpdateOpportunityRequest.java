@@ -1,40 +1,19 @@
 package com.example.demo.dto;
 
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class UpdateOpportunityRequest {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class UpdateOpportunityRequest extends BaseOpportunityRequest {
 
-    @NotBlank(message = "Title is required")
-    @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
-    private String title;
-
-    @NotBlank(message = "Description is required")
-    @Size(min = 10, max = 1000, message = "Description must be between 10 and 1000 characters")
-    private String description;
-
-    @NotBlank(message = "Skills are required")
-    @Size(min = 3, max = 200, message = "Skills must be between 3 and 200 characters")
-    private String skills;
-
-    @NotBlank(message = "Category is required")
-    @Size(min = 3, max = 100, message = "Category must be between 3 and 100 characters")
-    private String category;
-
-    @NotNull(message = "Duration is required")
-    @Positive(message = "Duration must be positive")
-    private Integer duration;
-
-    @NotNull(message = "Vacancies is required")
-    @Positive(message = "Vacancies must be positive")
-    private Integer vacancies;
-
-    @NotNull(message = "Points are required")
-    @PositiveOrZero(message = "Points must be zero or positive")
-    private Integer points;
+    public UpdateOpportunityRequest(String title, String description, String skills,
+                                    String category, Integer duration, Integer vacancies,
+                                    Integer points) {
+        super(title, description, skills, category, duration, vacancies, points);
+    }
 }
