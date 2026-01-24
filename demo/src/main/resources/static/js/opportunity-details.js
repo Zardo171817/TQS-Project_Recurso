@@ -87,16 +87,70 @@ function displayOpportunityDetails(opportunity) {
 }
 
 function handleApply() {
-    const messageContainer = document.getElementById('messageContainer');
-    messageContainer.innerHTML = `
-        <div class="message success">
-            Funcionalidade de candidatura sera implementada em breve. Obrigado pelo seu interesse!
-        </div>
-    `;
+    const modal = document.getElementById('applyModal');
+    modal.style.display = 'flex';
+}
 
-    setTimeout(() => {
-        messageContainer.innerHTML = '';
-    }, 5000);
+function closeApplyModal() {
+    const modal = document.getElementById('applyModal');
+    modal.style.display = 'none';
+    document.getElementById('applyForm').reset();
+}
+
+async function submitApplication(event) {
+    event.preventDefault();
+
+    const opportunityId = getOpportunityIdFromUrl();
+    const messageContainer = document.getElementById('messageContainer');
+    const submitBtn = document.getElementById('submitApplicationBtn');
+
+    const applicationData = {
+        opportunityId: parseInt(opportunityId),
+        volunteerName: document.getElementById('volunteerName').value,
+        volunteerEmail: document.getElementById('volunteerEmail').value,
+        volunteerPhone: document.getElementById('volunteerPhone').value || null,
+        volunteerSkills: document.getElementById('volunteerSkills').value || null,
+        motivation: document.getElementById('motivation').value || null
+    };
+
+    try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+
+        const response = await fetch(`${API_BASE_URL}/applications`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(applicationData)
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Erro ao submeter candidatura');
+        }
+
+        closeApplyModal();
+        messageContainer.innerHTML = `
+            <div class="message success">
+                Candidatura submetida com sucesso! Entraremos em contacto em breve.
+            </div>
+        `;
+
+        document.getElementById('applyButton').disabled = true;
+        document.getElementById('applyButton').textContent = 'Candidatura Enviada';
+
+    } catch (error) {
+        console.error('Error submitting application:', error);
+        messageContainer.innerHTML = `
+            <div class="message error">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submeter Candidatura';
+    }
 }
 
 function escapeHtml(text) {

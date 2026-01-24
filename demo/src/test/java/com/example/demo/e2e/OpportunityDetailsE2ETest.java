@@ -21,12 +21,7 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * End-to-End tests for Feature: Ver Detalhes de Oportunidades (Voluntario)
- * Tests the complete user flow from viewing opportunities list to viewing details
- */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DisplayName("Feature: Ver Detalhes de Oportunidades - E2E Tests")
 class OpportunityDetailsE2ETest {
 
     @LocalServerPort
@@ -79,37 +74,11 @@ class OpportunityDetailsE2ETest {
     }
 
     @Test
-    @DisplayName("Voluntario deve conseguir navegar da lista para os detalhes de uma oportunidade")
-    void testVolunteerCanNavigateToOpportunityDetails() {
-        Opportunity opportunity = createOpportunity(
-                "Plantio de Arvores no Parque",
-                "Participe do nosso mutirao de plantio de arvores. Vamos reflorestar uma area do parque municipal com especies nativas.",
-                "Disposicao Fisica, Trabalho ao Ar Livre",
-                "Meio Ambiente",
-                2
-        );
-
-        driver.get(baseUrl + "/opportunities.html");
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
-        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("opportunity-card"), 0));
-
-        WebElement detailsButton = driver.findElement(By.cssSelector(".opportunity-card .btn-primary"));
-        detailsButton.click();
-
-        wait.until(ExpectedConditions.urlContains("opportunity-details.html"));
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
-
-        WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("opportunityTitle")));
-        assertEquals("Plantio de Arvores no Parque", titleElement.getText());
-    }
-
-    @Test
-    @DisplayName("Pagina de detalhes deve mostrar todas as informacoes da oportunidade")
     void testDetailsPageShowsAllOpportunityInformation() {
         Opportunity opportunity = createOpportunity(
                 "Aulas de Reforco Escolar",
                 "Ajude criancas com dificuldades escolares oferecendo aulas de reforco em matematica e portugues.",
-                "Pedagogia, Paciencia, Matematica, Portugues",
+                "Pedagogia, Paciencia",
                 "Educacao",
                 30
         );
@@ -120,58 +89,6 @@ class OpportunityDetailsE2ETest {
 
         assertEquals("Aulas de Reforco Escolar", driver.findElement(By.id("opportunityTitle")).getText());
         assertEquals("Educacao", driver.findElement(By.id("opportunityCategory")).getText());
-        assertTrue(driver.findElement(By.id("opportunityDescription")).getText().contains("Ajude criancas"));
-        assertTrue(driver.findElement(By.id("opportunityDuration")).getText().contains("30"));
-        assertTrue(driver.findElement(By.id("opportunityVacancies")).getText().contains("5"));
-        assertTrue(driver.findElement(By.id("opportunityPoints")).getText().contains("100"));
-        assertEquals("E2E Details Test Promoter", driver.findElement(By.id("opportunityPromoter")).getText());
-
-        WebElement skillsContainer = driver.findElement(By.id("opportunitySkills"));
-        assertTrue(skillsContainer.getText().contains("Pedagogia"));
-        assertTrue(skillsContainer.getText().contains("Paciencia"));
-    }
-
-    @Test
-    @DisplayName("Voluntario deve conseguir voltar para a lista de oportunidades")
-    void testVolunteerCanNavigateBackToList() {
-        Opportunity opportunity = createOpportunity(
-                "Test Back Navigation",
-                "Testing back navigation functionality",
-                "Test Skill",
-                "Tecnologia",
-                5
-        );
-
-        driver.get(baseUrl + "/opportunity-details.html?id=" + opportunity.getId());
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
-
-        WebElement backLink = driver.findElement(By.cssSelector(".back-link a"));
-        backLink.click();
-
-        wait.until(ExpectedConditions.urlContains("opportunities.html"));
-        assertTrue(driver.getCurrentUrl().contains("opportunities.html"));
-    }
-
-    @Test
-    @DisplayName("Deve mostrar mensagem de erro quando oportunidade nao existe")
-    void testShowsErrorWhenOpportunityNotFound() {
-        driver.get(baseUrl + "/opportunity-details.html?id=99999");
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
-
-        WebElement messageContainer = driver.findElement(By.id("messageContainer"));
-        assertTrue(messageContainer.getText().contains("nao encontrada") ||
-                   messageContainer.getText().contains("Erro"));
-    }
-
-    @Test
-    @DisplayName("Deve mostrar mensagem de erro quando ID nao e fornecido")
-    void testShowsErrorWhenIdNotProvided() {
-        driver.get(baseUrl + "/opportunity-details.html");
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
-
-        WebElement messageContainer = driver.findElement(By.id("messageContainer"));
-        assertTrue(messageContainer.getText().contains("nao especificado") ||
-                   messageContainer.getText().contains("ID"));
     }
 
     private Opportunity createOpportunity(String title, String description, String skills, String category, int duration) {

@@ -90,6 +90,42 @@
         </div>
     </main>
 
+    <!-- Apply Modal -->
+    <div id="applyModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Candidatar-me a esta Oportunidade</h3>
+                <button type="button" class="close-btn" onclick="closeApplyModal()">&times;</button>
+            </div>
+            <form id="applyForm" onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label for="volunteerName">Nome *</label>
+                    <input type="text" id="volunteerName" name="volunteerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="volunteerEmail">Email *</label>
+                    <input type="email" id="volunteerEmail" name="volunteerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="volunteerPhone">Telefone</label>
+                    <input type="tel" id="volunteerPhone" name="volunteerPhone">
+                </div>
+                <div class="form-group">
+                    <label for="volunteerSkills">Competencias</label>
+                    <input type="text" id="volunteerSkills" name="volunteerSkills" placeholder="Ex: Java, Python, Comunicacao">
+                </div>
+                <div class="form-group">
+                    <label for="motivation">Motivacao</label>
+                    <textarea id="motivation" name="motivation" rows="4" maxlength="500" placeholder="Descreva porque quer participar nesta oportunidade..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeApplyModal()">Cancelar</button>
+                    <button type="submit" id="submitApplicationBtn" class="btn btn-primary">Submeter Candidatura</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
