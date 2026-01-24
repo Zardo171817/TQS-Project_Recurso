@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.Opportunity;
+import com.example.demo.entity.OpportunityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,8 @@ public class OpportunityResponse {
     private Long promoterId;
     private String promoterName;
     private LocalDateTime createdAt;
+    private OpportunityStatus status;
+    private LocalDateTime concludedAt;
 
     public static OpportunityResponse fromEntity(Opportunity opportunity) {
         OpportunityResponse response = new OpportunityResponse();
@@ -37,6 +40,8 @@ public class OpportunityResponse {
         response.setPromoterId(opportunity.getPromoter().getId());
         response.setPromoterName(opportunity.getPromoter().getName());
         response.setCreatedAt(opportunity.getCreatedAt());
+        response.setStatus(opportunity.getStatus());
+        response.setConcludedAt(opportunity.getConcludedAt());
         return response;
     }
 }

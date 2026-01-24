@@ -38,11 +38,25 @@ public class Application {
     @Column(nullable = false)
     private LocalDateTime appliedAt;
 
+    @Column(nullable = false)
+    private Boolean participationConfirmed = false;
+
+    @Column(nullable = false)
+    private Integer pointsAwarded = 0;
+
+    private LocalDateTime confirmedAt;
+
     @PrePersist
     protected void onCreate() {
         appliedAt = LocalDateTime.now();
         if (status == null) {
             status = ApplicationStatus.PENDING;
+        }
+        if (participationConfirmed == null) {
+            participationConfirmed = false;
+        }
+        if (pointsAwarded == null) {
+            pointsAwarded = 0;
         }
     }
 }
