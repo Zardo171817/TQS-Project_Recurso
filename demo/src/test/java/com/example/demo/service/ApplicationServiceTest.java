@@ -262,4 +262,54 @@ class ApplicationServiceTest {
 
         assertTrue(responses.isEmpty());
     }
+
+    // Feature: Update Application Status
+    @Test
+    void whenUpdateApplicationStatus_thenSuccess() {
+        when(applicationRepository.findById(1L)).thenReturn(Optional.of(testApplication));
+
+        Application updatedApplication = new Application();
+        updatedApplication.setId(1L);
+        updatedApplication.setVolunteer(testVolunteer);
+        updatedApplication.setOpportunity(testOpportunity);
+        updatedApplication.setStatus(ApplicationStatus.ACCEPTED);
+        updatedApplication.setMotivation("I want to help");
+        updatedApplication.setAppliedAt(testApplication.getAppliedAt());
+
+        when(applicationRepository.save(any(Application.class))).thenReturn(updatedApplication);
+
+        ApplicationResponse response = applicationService.updateApplicationStatus(1L, ApplicationStatus.ACCEPTED);
+
+        assertNotNull(response);
+        assertEquals(ApplicationStatus.ACCEPTED, response.getStatus());
+        verify(applicationRepository).save(any(Application.class));
+    }
+
+    @Test
+    void whenUpdateApplicationStatusNotFound_thenThrowException() {
+        when(applicationRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () ->
+            applicationService.updateApplicationStatus(999L, ApplicationStatus.ACCEPTED));
+    }
+
+    @Test
+    void whenUpdateApplicationStatusToRejected_thenSuccess() {
+        when(applicationRepository.findById(1L)).thenReturn(Optional.of(testApplication));
+
+        Application updatedApplication = new Application();
+        updatedApplication.setId(1L);
+        updatedApplication.setVolunteer(testVolunteer);
+        updatedApplication.setOpportunity(testOpportunity);
+        updatedApplication.setStatus(ApplicationStatus.REJECTED);
+        updatedApplication.setMotivation("I want to help");
+        updatedApplication.setAppliedAt(testApplication.getAppliedAt());
+
+        when(applicationRepository.save(any(Application.class))).thenReturn(updatedApplication);
+
+        ApplicationResponse response = applicationService.updateApplicationStatus(1L, ApplicationStatus.REJECTED);
+
+        assertNotNull(response);
+        assertEquals(ApplicationStatus.REJECTED, response.getStatus());
+    }
 }

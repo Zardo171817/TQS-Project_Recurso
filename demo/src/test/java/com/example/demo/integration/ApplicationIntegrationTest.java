@@ -258,4 +258,55 @@ class ApplicationIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
+
+    // Feature: Update Application Status - Integration Tests
+    @Test
+    void whenUpdateApplicationStatus_thenStatusUpdated() throws Exception {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(testOpportunity.getId());
+        request.setVolunteerName("Status Update Volunteer");
+        request.setVolunteerEmail("statusupdate@test.com");
+        request.setMotivation("Testing status update");
+
+        String responseJson = mockMvc.perform(post("/api/applications")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        Long applicationId = objectMapper.readTree(responseJson).get("id").asLong();
+
+        mockMvc.perform(patch("/api/applications/" + applicationId + "/status")
+                        .param("status", "ACCEPTED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ACCEPTED"));
+    }
+
+    @Test
+    void whenUpdateApplicationStatusToRejected_thenStatusUpdated() throws Exception {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(testOpportunity.getId());
+        request.setVolunteerName("Reject Volunteer");
+        request.setVolunteerEmail("reject@test.com");
+
+        String responseJson = mockMvc.perform(post("/api/applications")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        Long applicationId = objectMapper.readTree(responseJson).get("id").asLong();
+
+        mockMvc.perform(patch("/api/applications/" + applicationId + "/status")
+                        .param("status", "REJECTED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("REJECTED"));
+    }
+
+    @Test
+    void whenUpdateApplicationStatusNotFound_thenReturnNotFound() throws Exception {
+        mockMvc.perform(patch("/api/applications/999/status")
+                        .param("status", "ACCEPTED"))
+                .andExpect(status().isNotFound());
+    }
 }
