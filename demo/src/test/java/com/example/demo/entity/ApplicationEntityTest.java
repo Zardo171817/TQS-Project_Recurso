@@ -350,4 +350,571 @@ class ApplicationEntityTest {
         response.setMotivation(null);
         assertNull(response.getMotivation());
     }
+
+    // Testes adicionais para cobertura de Lombok equals/hashCode edge cases
+    @Test
+    void testVolunteerEqualsWithSameObject() {
+        Volunteer volunteer = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        assertEquals(volunteer, volunteer);
+    }
+
+    @Test
+    void testApplicationEqualsWithSameObject() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application application = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        assertEquals(application, application);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithSameObject() {
+        CreateApplicationRequest request = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        assertEquals(request, request);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithSameObject() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse response = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertEquals(response, response);
+    }
+
+    @Test
+    void testVolunteerEqualsWithDifferentClass() {
+        Volunteer volunteer = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        assertNotEquals(volunteer, new Object());
+    }
+
+    @Test
+    void testApplicationEqualsWithNull() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application application = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(application, null);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithNull() {
+        CreateApplicationRequest request = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        assertNotEquals(request, null);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithNull() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse response = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(response, null);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentClass() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse response = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(response, "string");
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithDifferentClass() {
+        CreateApplicationRequest request = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        assertNotEquals(request, "string");
+    }
+
+    @Test
+    void testApplicationEqualsWithDifferentClass() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application application = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(application, "string");
+    }
+
+    // Testes de hashCode consistency
+    @Test
+    void testVolunteerHashCodeConsistency() {
+        Volunteer volunteer = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        int hash1 = volunteer.hashCode();
+        int hash2 = volunteer.hashCode();
+        assertEquals(hash1, hash2);
+    }
+
+    @Test
+    void testApplicationHashCodeConsistency() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application application = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        int hash1 = application.hashCode();
+        int hash2 = application.hashCode();
+        assertEquals(hash1, hash2);
+    }
+
+    @Test
+    void testCreateApplicationRequestHashCodeConsistency() {
+        CreateApplicationRequest request = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        int hash1 = request.hashCode();
+        int hash2 = request.hashCode();
+        assertEquals(hash1, hash2);
+    }
+
+    @Test
+    void testApplicationResponseHashCodeConsistency() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse response = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        int hash1 = response.hashCode();
+        int hash2 = response.hashCode();
+        assertEquals(hash1, hash2);
+    }
+
+    // Testes para campos individuais diferentes em equals
+    @Test
+    void testVolunteerEqualsWithDifferentId() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        Volunteer v2 = new Volunteer(2L, "John", "john@test.com", "123", "Java");
+        assertNotEquals(v1, v2);
+    }
+
+    @Test
+    void testVolunteerEqualsWithDifferentName() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        Volunteer v2 = new Volunteer(1L, "Jane", "john@test.com", "123", "Java");
+        assertNotEquals(v1, v2);
+    }
+
+    @Test
+    void testVolunteerEqualsWithDifferentEmail() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        Volunteer v2 = new Volunteer(1L, "John", "jane@test.com", "123", "Java");
+        assertNotEquals(v1, v2);
+    }
+
+    @Test
+    void testVolunteerEqualsWithDifferentPhone() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        Volunteer v2 = new Volunteer(1L, "John", "john@test.com", "456", "Java");
+        assertNotEquals(v1, v2);
+    }
+
+    @Test
+    void testVolunteerEqualsWithDifferentSkills() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        Volunteer v2 = new Volunteer(1L, "John", "john@test.com", "123", "Python");
+        assertNotEquals(v1, v2);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithDifferentOpportunityId() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(2L, "John", "john@test.com", "123", "Java", "Motivation");
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithDifferentVolunteerName() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "Jane", "john@test.com", "123", "Java", "Motivation");
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithDifferentVolunteerEmail() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "jane@test.com", "123", "Java", "Motivation");
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithDifferentVolunteerPhone() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "john@test.com", "456", "Java", "Motivation");
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithDifferentVolunteerSkills() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Python", "Motivation");
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithDifferentMotivation() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Different");
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentId() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(2L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentVolunteerId() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 3L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentVolunteerName() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "Jane", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentVolunteerEmail() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "jane@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentOpportunityId() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 4L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentOpportunityTitle() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Other", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentStatus() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.ACCEPTED, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentMotivation() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Different", now);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithDifferentAppliedAt() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime later = now.plusDays(1);
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", later);
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationEqualsWithDifferentId() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        Application a2 = new Application(2L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testApplicationEqualsWithDifferentVolunteer() {
+        Volunteer v1 = new Volunteer(1L, "Test1", "test1@test.com", null, null);
+        Volunteer v2 = new Volunteer(2L, "Test2", "test2@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, v1, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        Application a2 = new Application(1L, v2, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testApplicationEqualsWithDifferentOpportunity() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity o1 = new Opportunity();
+        o1.setId(1L);
+        Opportunity o2 = new Opportunity();
+        o2.setId(2L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, volunteer, o1, ApplicationStatus.PENDING, "Motivation", now);
+        Application a2 = new Application(1L, volunteer, o2, ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testApplicationEqualsWithDifferentStatus() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        Application a2 = new Application(1L, volunteer, opportunity, ApplicationStatus.ACCEPTED, "Motivation", now);
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testApplicationEqualsWithDifferentMotivation() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation1", now);
+        Application a2 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation2", now);
+        assertNotEquals(a1, a2);
+    }
+
+    @Test
+    void testApplicationEqualsWithDifferentAppliedAt() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime later = now.plusDays(1);
+        Application a1 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        Application a2 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", later);
+        assertNotEquals(a1, a2);
+    }
+
+    // Testes com campos null
+    @Test
+    void testVolunteerEqualsWithNullFields() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", null, null);
+        Volunteer v2 = new Volunteer(1L, "John", "john@test.com", null, null);
+        assertEquals(v1, v2);
+    }
+
+    @Test
+    void testVolunteerHashCodeWithNullFields() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", null, null);
+        Volunteer v2 = new Volunteer(1L, "John", "john@test.com", null, null);
+        assertEquals(v1.hashCode(), v2.hashCode());
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsWithNullFields() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", null, null, null);
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "john@test.com", null, null, null);
+        assertEquals(r1, r2);
+    }
+
+    @Test
+    void testCreateApplicationRequestHashCodeWithNullFields() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", null, null, null);
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "john@test.com", null, null, null);
+        assertEquals(r1.hashCode(), r2.hashCode());
+    }
+
+    @Test
+    void testApplicationResponseEqualsWithNullFields() {
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, null, null);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, null, null);
+        assertEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseHashCodeWithNullFields() {
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, null, null);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, null, null);
+        assertEquals(r1.hashCode(), r2.hashCode());
+    }
+
+    @Test
+    void testApplicationEqualsWithNullMotivation() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, null, now);
+        Application a2 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, null, now);
+        assertEquals(a1, a2);
+    }
+
+    @Test
+    void testApplicationHashCodeWithNullMotivation() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, null, now);
+        Application a2 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, null, now);
+        assertEquals(a1.hashCode(), a2.hashCode());
+    }
+
+    // Testes de toString contendo campos
+    @Test
+    void testVolunteerToStringContainsAllFields() {
+        Volunteer volunteer = new Volunteer(1L, "John", "john@test.com", "123456", "Java");
+        String str = volunteer.toString();
+        assertThat(str).contains("1");
+        assertThat(str).contains("John");
+        assertThat(str).contains("john@test.com");
+        assertThat(str).contains("123456");
+        assertThat(str).contains("Java");
+    }
+
+    @Test
+    void testCreateApplicationRequestToStringContainsAllFields() {
+        CreateApplicationRequest request = new CreateApplicationRequest(1L, "John", "john@test.com", "123456", "Java", "Motivation");
+        String str = request.toString();
+        assertThat(str).contains("1");
+        assertThat(str).contains("John");
+        assertThat(str).contains("john@test.com");
+        assertThat(str).contains("123456");
+        assertThat(str).contains("Java");
+        assertThat(str).contains("Motivation");
+    }
+
+    @Test
+    void testApplicationResponseToStringContainsAllFields() {
+        LocalDateTime now = LocalDateTime.of(2026, 1, 24, 10, 0);
+        ApplicationResponse response = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        String str = response.toString();
+        assertThat(str).contains("1");
+        assertThat(str).contains("2");
+        assertThat(str).contains("John");
+        assertThat(str).contains("john@test.com");
+        assertThat(str).contains("3");
+        assertThat(str).contains("Title");
+        assertThat(str).contains("PENDING");
+        assertThat(str).contains("Motivation");
+    }
+
+    // Testes para canEqual (implícito via subclasses scenario)
+    @Test
+    void testVolunteerEqualsSymmetry() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        Volunteer v2 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        assertTrue(v1.equals(v2) && v2.equals(v1));
+    }
+
+    @Test
+    void testApplicationEqualsSymmetry() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application a1 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        Application a2 = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+        assertTrue(a1.equals(a2) && a2.equals(a1));
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsSymmetry() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        assertTrue(r1.equals(r2) && r2.equals(r1));
+    }
+
+    @Test
+    void testApplicationResponseEqualsSymmetry() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertTrue(r1.equals(r2) && r2.equals(r1));
+    }
+
+    // Mais testes para getters individuais não testados
+    @Test
+    void testVolunteerGetId() {
+        Volunteer volunteer = new Volunteer();
+        volunteer.setId(999L);
+        assertEquals(999L, volunteer.getId());
+    }
+
+    @Test
+    void testApplicationGetId() {
+        Application application = new Application();
+        application.setId(999L);
+        assertEquals(999L, application.getId());
+    }
+
+    @Test
+    void testCreateApplicationRequestGetOpportunityId() {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(999L);
+        assertEquals(999L, request.getOpportunityId());
+    }
+
+    @Test
+    void testApplicationResponseGetId() {
+        ApplicationResponse response = new ApplicationResponse();
+        response.setId(999L);
+        assertEquals(999L, response.getId());
+    }
+
+    // Testes para Application default status
+    @Test
+    void testApplicationDefaultStatus() {
+        Application application = new Application();
+        assertEquals(ApplicationStatus.PENDING, application.getStatus());
+    }
+
+    // Testes para valores vazios
+    @Test
+    void testVolunteerWithEmptyStrings() {
+        Volunteer volunteer = new Volunteer(1L, "", "", "", "");
+        assertEquals("", volunteer.getName());
+        assertEquals("", volunteer.getEmail());
+        assertEquals("", volunteer.getPhone());
+        assertEquals("", volunteer.getSkills());
+    }
+
+    @Test
+    void testCreateApplicationRequestWithEmptyStrings() {
+        CreateApplicationRequest request = new CreateApplicationRequest(1L, "", "", "", "", "");
+        assertEquals("", request.getVolunteerName());
+        assertEquals("", request.getVolunteerEmail());
+        assertEquals("", request.getVolunteerPhone());
+        assertEquals("", request.getVolunteerSkills());
+        assertEquals("", request.getMotivation());
+    }
+
+    @Test
+    void testApplicationResponseWithEmptyStrings() {
+        ApplicationResponse response = new ApplicationResponse(1L, 2L, "", "", 3L, "", ApplicationStatus.PENDING, "", null);
+        assertEquals("", response.getVolunteerName());
+        assertEquals("", response.getVolunteerEmail());
+        assertEquals("", response.getOpportunityTitle());
+        assertEquals("", response.getMotivation());
+    }
+
+    // Testes de null vs non-null em equals
+    @Test
+    void testVolunteerEqualsOneNullPhone() {
+        Volunteer v1 = new Volunteer(1L, "John", "john@test.com", null, "Java");
+        Volunteer v2 = new Volunteer(1L, "John", "john@test.com", "123", "Java");
+        assertNotEquals(v1, v2);
+    }
+
+    @Test
+    void testCreateApplicationRequestEqualsOneNullPhone() {
+        CreateApplicationRequest r1 = new CreateApplicationRequest(1L, "John", "john@test.com", null, "Java", "Motivation");
+        CreateApplicationRequest r2 = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        assertNotEquals(r1, r2);
+    }
+
+    @Test
+    void testApplicationResponseEqualsOneNullMotivation() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse r1 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, null, now);
+        ApplicationResponse r2 = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        assertNotEquals(r1, r2);
+    }
 }
