@@ -160,4 +160,38 @@ class ApplicationServiceTest {
         assertThrows(ResourceNotFoundException.class, () ->
             applicationService.getApplicationsByVolunteer(999L));
     }
+
+    @Test
+    void whenCreateApplicationWithExistingVolunteer_thenSuccess() {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(1L);
+        request.setVolunteerName("Test Volunteer");
+        request.setVolunteerEmail("volunteer@test.com");
+        request.setVolunteerPhone("123456789");
+        request.setVolunteerSkills("Java, Python");
+        request.setMotivation("I want to help");
+
+        when(opportunityRepository.findById(1L)).thenReturn(Optional.of(testOpportunity));
+        when(volunteerRepository.findByEmail("volunteer@test.com")).thenReturn(Optional.of(testVolunteer));
+        when(applicationRepository.existsByVolunteerIdAndOpportunityId(1L, 1L)).thenReturn(false);
+        when(applicationRepository.save(any(Application.class))).thenReturn(testApplication);
+
+        ApplicationResponse response = applicationService.createApplication(request);
+
+        assertNotNull(response);
+        assertEquals(ApplicationStatus.PENDING, response.getStatus());
+        verify(volunteerRepository, never()).save(any(Volunteer.class));
+    }
+
+    @Test
+    void whenCreateApplicationWithOpportunityNotFound_thenThrowException() {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(999L);
+        request.setVolunteerEmail("test@test.com");
+
+        when(opportunityRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () ->
+            applicationService.createApplication(request));
+    }
 }

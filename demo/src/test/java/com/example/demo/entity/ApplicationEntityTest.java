@@ -192,4 +192,162 @@ class ApplicationEntityTest {
         assertEquals(ApplicationStatus.ACCEPTED, ApplicationStatus.valueOf("ACCEPTED"));
         assertEquals(ApplicationStatus.REJECTED, ApplicationStatus.valueOf("REJECTED"));
     }
+
+    // Testes para setters individuais - CreateApplicationRequest
+    @Test
+    void testCreateApplicationRequestNoArgsConstructorAndSetters() {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+
+        request.setOpportunityId(5L);
+        request.setVolunteerName("Maria");
+        request.setVolunteerEmail("maria@test.com");
+        request.setVolunteerPhone("912345678");
+        request.setVolunteerSkills("Communication, Leadership");
+        request.setMotivation("I want to contribute");
+
+        assertEquals(5L, request.getOpportunityId());
+        assertEquals("Maria", request.getVolunteerName());
+        assertEquals("maria@test.com", request.getVolunteerEmail());
+        assertEquals("912345678", request.getVolunteerPhone());
+        assertEquals("Communication, Leadership", request.getVolunteerSkills());
+        assertEquals("I want to contribute", request.getMotivation());
+    }
+
+    @Test
+    void testCreateApplicationRequestToString() {
+        CreateApplicationRequest request = new CreateApplicationRequest(1L, "John", "john@test.com", "123", "Java", "Motivation");
+        String str = request.toString();
+
+        assertThat(str).contains("John");
+        assertThat(str).contains("john@test.com");
+        assertThat(str).contains("Java");
+    }
+
+    // Testes para setters individuais - ApplicationResponse
+    @Test
+    void testApplicationResponseNoArgsConstructorAndSetters() {
+        ApplicationResponse response = new ApplicationResponse();
+        LocalDateTime now = LocalDateTime.now();
+
+        response.setId(10L);
+        response.setVolunteerId(20L);
+        response.setVolunteerName("Carlos");
+        response.setVolunteerEmail("carlos@test.com");
+        response.setOpportunityId(30L);
+        response.setOpportunityTitle("Help Event");
+        response.setStatus(ApplicationStatus.ACCEPTED);
+        response.setMotivation("Quero ajudar");
+        response.setAppliedAt(now);
+
+        assertEquals(10L, response.getId());
+        assertEquals(20L, response.getVolunteerId());
+        assertEquals("Carlos", response.getVolunteerName());
+        assertEquals("carlos@test.com", response.getVolunteerEmail());
+        assertEquals(30L, response.getOpportunityId());
+        assertEquals("Help Event", response.getOpportunityTitle());
+        assertEquals(ApplicationStatus.ACCEPTED, response.getStatus());
+        assertEquals("Quero ajudar", response.getMotivation());
+        assertEquals(now, response.getAppliedAt());
+    }
+
+    @Test
+    void testApplicationResponseToString() {
+        LocalDateTime now = LocalDateTime.now();
+        ApplicationResponse response = new ApplicationResponse(1L, 2L, "John", "john@test.com", 3L, "Title", ApplicationStatus.PENDING, "Motivation", now);
+        String str = response.toString();
+
+        assertThat(str).contains("John");
+        assertThat(str).contains("john@test.com");
+        assertThat(str).contains("Title");
+    }
+
+    // Testes para setters individuais - Volunteer
+    @Test
+    void testVolunteerNoArgsConstructorAndSetters() {
+        Volunteer volunteer = new Volunteer();
+
+        volunteer.setId(15L);
+        volunteer.setName("Pedro");
+        volunteer.setEmail("pedro@test.com");
+        volunteer.setPhone("987654321");
+        volunteer.setSkills("Excel, Word");
+
+        assertEquals(15L, volunteer.getId());
+        assertEquals("Pedro", volunteer.getName());
+        assertEquals("pedro@test.com", volunteer.getEmail());
+        assertEquals("987654321", volunteer.getPhone());
+        assertEquals("Excel, Word", volunteer.getSkills());
+    }
+
+    // Testes para setters individuais - Application
+    @Test
+    void testApplicationNoArgsConstructorAndSetters() {
+        Application application = new Application();
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+
+        application.setId(100L);
+        application.setVolunteer(volunteer);
+        application.setOpportunity(opportunity);
+        application.setStatus(ApplicationStatus.REJECTED);
+        application.setMotivation("My reason");
+        application.setAppliedAt(now);
+
+        assertEquals(100L, application.getId());
+        assertEquals(volunteer, application.getVolunteer());
+        assertEquals(opportunity, application.getOpportunity());
+        assertEquals(ApplicationStatus.REJECTED, application.getStatus());
+        assertEquals("My reason", application.getMotivation());
+        assertEquals(now, application.getAppliedAt());
+    }
+
+    @Test
+    void testApplicationToString() {
+        Volunteer volunteer = new Volunteer(1L, "Test", "test@test.com", null, null);
+        Opportunity opportunity = new Opportunity();
+        opportunity.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        Application application = new Application(1L, volunteer, opportunity, ApplicationStatus.PENDING, "Motivation", now);
+
+        String str = application.toString();
+        assertThat(str).contains("Motivation");
+    }
+
+    // Testes com valores null
+    @Test
+    void testVolunteerWithNullValues() {
+        Volunteer volunteer = new Volunteer();
+        volunteer.setId(1L);
+        volunteer.setName("Test");
+        volunteer.setEmail("test@test.com");
+        volunteer.setPhone(null);
+        volunteer.setSkills(null);
+
+        assertNull(volunteer.getPhone());
+        assertNull(volunteer.getSkills());
+    }
+
+    @Test
+    void testCreateApplicationRequestWithNullOptionalFields() {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(1L);
+        request.setVolunteerName("Test");
+        request.setVolunteerEmail("test@test.com");
+        request.setVolunteerPhone(null);
+        request.setVolunteerSkills(null);
+        request.setMotivation(null);
+
+        assertNull(request.getVolunteerPhone());
+        assertNull(request.getVolunteerSkills());
+        assertNull(request.getMotivation());
+    }
+
+    @Test
+    void testApplicationResponseWithNullMotivation() {
+        ApplicationResponse response = new ApplicationResponse();
+        response.setMotivation(null);
+        assertNull(response.getMotivation());
+    }
 }
