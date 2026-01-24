@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateOpportunityRequest;
 import com.example.demo.dto.OpportunityResponse;
+import com.example.demo.dto.UpdateOpportunityRequest;
 import com.example.demo.service.OpportunityService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -62,5 +63,19 @@ public class OpportunityController {
     public ResponseEntity<List<String>> getAllCategories() {
         List<String> categories = opportunityService.getAllCategories();
         return ResponseEntity.ok(categories);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OpportunityResponse> updateOpportunity(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateOpportunityRequest request) {
+        OpportunityResponse response = opportunityService.updateOpportunity(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOpportunity(@PathVariable Long id) {
+        opportunityService.deleteOpportunity(id);
+        return ResponseEntity.noContent().build();
     }
 }

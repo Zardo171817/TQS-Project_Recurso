@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateOpportunityRequest;
 import com.example.demo.dto.OpportunityResponse;
+import com.example.demo.dto.UpdateOpportunityRequest;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.service.OpportunityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -245,5 +246,97 @@ class OpportunityControllerTest {
         mockMvc.perform(get("/api/opportunities/categories"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    // Update Opportunity Tests
+    @Test
+    void whenUpdateOpportunity_thenReturnUpdatedOpportunity() throws Exception {
+        UpdateOpportunityRequest updateRequest = new UpdateOpportunityRequest();
+        updateRequest.setTitle("Updated Opportunity");
+        updateRequest.setDescription("Updated Description for opportunity");
+        updateRequest.setSkills("Java, Spring, Docker");
+        updateRequest.setCategory("Tecnologia");
+        updateRequest.setDuration(20);
+        updateRequest.setVacancies(10);
+        updateRequest.setPoints(200);
+
+        OpportunityResponse updatedResponse = new OpportunityResponse();
+        updatedResponse.setId(1L);
+        updatedResponse.setTitle("Updated Opportunity");
+        updatedResponse.setDescription("Updated Description for opportunity");
+        updatedResponse.setSkills("Java, Spring, Docker");
+        updatedResponse.setCategory("Tecnologia");
+        updatedResponse.setDuration(20);
+        updatedResponse.setVacancies(10);
+        updatedResponse.setPoints(200);
+        updatedResponse.setPromoterId(1L);
+        updatedResponse.setPromoterName("Test Promoter");
+        updatedResponse.setCreatedAt(LocalDateTime.now());
+
+        when(opportunityService.updateOpportunity(eq(1L), any(UpdateOpportunityRequest.class)))
+                .thenReturn(updatedResponse);
+
+        mockMvc.perform(put("/api/opportunities/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.title", is("Updated Opportunity")))
+                .andExpect(jsonPath("$.duration", is(20)))
+                .andExpect(jsonPath("$.vacancies", is(10)))
+                .andExpect(jsonPath("$.points", is(200)));
+
+        verify(opportunityService, times(1)).updateOpportunity(eq(1L), any(UpdateOpportunityRequest.class));
+    }
+
+    @Test
+    void whenUpdateOpportunityNotFound_thenReturnNotFound() throws Exception {
+        UpdateOpportunityRequest updateRequest = new UpdateOpportunityRequest();
+        updateRequest.setTitle("Updated Opportunity");
+        updateRequest.setDescription("Updated Description for opportunity");
+        updateRequest.setSkills("Java, Spring");
+        updateRequest.setCategory("Tecnologia");
+        updateRequest.setDuration(20);
+        updateRequest.setVacancies(10);
+        updateRequest.setPoints(200);
+
+        when(opportunityService.updateOpportunity(eq(999L), any(UpdateOpportunityRequest.class)))
+                .thenThrow(new ResourceNotFoundException("Opportunity not found with id: 999"));
+
+        mockMvc.perform(put("/api/opportunities/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenUpdateOpportunityWithInvalidData_thenReturnBadRequest() throws Exception {
+        UpdateOpportunityRequest invalidRequest = new UpdateOpportunityRequest();
+        invalidRequest.setTitle(""); // Invalid - blank
+
+        mockMvc.perform(put("/api/opportunities/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    // Delete Opportunity Tests
+    @Test
+    void whenDeleteOpportunity_thenReturnNoContent() throws Exception {
+        doNothing().when(opportunityService).deleteOpportunity(1L);
+
+        mockMvc.perform(delete("/api/opportunities/1"))
+                .andExpect(status().isNoContent());
+
+        verify(opportunityService, times(1)).deleteOpportunity(1L);
+    }
+
+    @Test
+    void whenDeleteOpportunityNotFound_thenReturnNotFound() throws Exception {
+        doThrow(new ResourceNotFoundException("Opportunity not found with id: 999"))
+                .when(opportunityService).deleteOpportunity(999L);
+
+        mockMvc.perform(delete("/api/opportunities/999"))
+                .andExpect(status().isNotFound());
     }
 }

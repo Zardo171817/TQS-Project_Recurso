@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.CreateOpportunityRequest;
 import com.example.demo.dto.OpportunityFilterRequest;
 import com.example.demo.dto.OpportunityResponse;
+import com.example.demo.dto.UpdateOpportunityRequest;
 import com.example.demo.entity.Opportunity;
 import com.example.demo.entity.Promoter;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -368,5 +369,90 @@ class OpportunityServiceTest {
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
+    }
+
+    // Feature: Editar/Cancelar Oportunidades - Unit Tests
+    @Test
+    void whenUpdateOpportunityWithValidData_thenReturnUpdatedOpportunity() {
+        UpdateOpportunityRequest request = new UpdateOpportunityRequest();
+        request.setTitle("Updated Title");
+        request.setDescription("Updated Description here");
+        request.setSkills("Updated Skills");
+        request.setCategory("Saude");
+        request.setDuration(20);
+        request.setVacancies(15);
+        request.setPoints(200);
+
+        Opportunity updatedOpportunity = new Opportunity();
+        updatedOpportunity.setId(1L);
+        updatedOpportunity.setTitle("Updated Title");
+        updatedOpportunity.setDescription("Updated Description here");
+        updatedOpportunity.setSkills("Updated Skills");
+        updatedOpportunity.setCategory("Saude");
+        updatedOpportunity.setDuration(20);
+        updatedOpportunity.setVacancies(15);
+        updatedOpportunity.setPoints(200);
+        updatedOpportunity.setPromoter(testPromoter);
+        updatedOpportunity.setCreatedAt(testOpportunity.getCreatedAt());
+
+        when(opportunityRepository.findById(1L)).thenReturn(Optional.of(testOpportunity));
+        when(opportunityRepository.save(any(Opportunity.class))).thenReturn(updatedOpportunity);
+
+        OpportunityResponse response = opportunityService.updateOpportunity(1L, request);
+
+        assertNotNull(response);
+        assertEquals("Updated Title", response.getTitle());
+        assertEquals("Saude", response.getCategory());
+        assertEquals(20, response.getDuration());
+        assertEquals(15, response.getVacancies());
+        assertEquals(200, response.getPoints());
+        verify(opportunityRepository, times(1)).findById(1L);
+        verify(opportunityRepository, times(1)).save(any(Opportunity.class));
+    }
+
+    @Test
+    void whenUpdateOpportunityNotExists_thenThrowException() {
+        UpdateOpportunityRequest request = new UpdateOpportunityRequest();
+        request.setTitle("Updated Title");
+        request.setDescription("Updated Description here");
+        request.setSkills("Updated Skills");
+        request.setCategory("Saude");
+        request.setDuration(20);
+        request.setVacancies(15);
+        request.setPoints(200);
+
+        when(opportunityRepository.findById(999L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> opportunityService.updateOpportunity(999L, request)
+        );
+
+        assertTrue(exception.getMessage().contains("999"));
+        verify(opportunityRepository, never()).save(any(Opportunity.class));
+    }
+
+    @Test
+    void whenDeleteOpportunityExists_thenDeleteSuccessfully() {
+        when(opportunityRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(opportunityRepository).deleteById(1L);
+
+        opportunityService.deleteOpportunity(1L);
+
+        verify(opportunityRepository, times(1)).existsById(1L);
+        verify(opportunityRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void whenDeleteOpportunityNotExists_thenThrowException() {
+        when(opportunityRepository.existsById(999L)).thenReturn(false);
+
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> opportunityService.deleteOpportunity(999L)
+        );
+
+        assertTrue(exception.getMessage().contains("999"));
+        verify(opportunityRepository, never()).deleteById(any());
     }
 }

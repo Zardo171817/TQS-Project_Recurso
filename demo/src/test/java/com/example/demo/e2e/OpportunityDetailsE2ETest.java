@@ -89,11 +89,11 @@ class OpportunityDetailsE2ETest {
                 2
         );
 
-        driver.get(baseUrl + "/volunteer-opportunities.html");
+        driver.get(baseUrl + "/opportunities.html");
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("opportunity-card"), 0));
 
-        WebElement detailsButton = driver.findElement(By.cssSelector(".opportunity-card .btn-details"));
+        WebElement detailsButton = driver.findElement(By.cssSelector(".opportunity-card .btn-primary"));
         detailsButton.click();
 
         wait.until(ExpectedConditions.urlContains("opportunity-details.html"));
@@ -148,8 +148,8 @@ class OpportunityDetailsE2ETest {
         WebElement backLink = driver.findElement(By.cssSelector(".back-link a"));
         backLink.click();
 
-        wait.until(ExpectedConditions.urlContains("volunteer-opportunities.html"));
-        assertTrue(driver.getCurrentUrl().contains("volunteer-opportunities.html"));
+        wait.until(ExpectedConditions.urlContains("opportunities.html"));
+        assertTrue(driver.getCurrentUrl().contains("opportunities.html"));
     }
 
     @Test
