@@ -145,4 +145,45 @@ class ApplicationIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
+
+    @Test
+    void whenGetApplicationById_thenReturnApplication() throws Exception {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(testOpportunity.getId());
+        request.setVolunteerName("Test Vol");
+        request.setVolunteerEmail("testbyid@test.com");
+
+        String responseJson = mockMvc.perform(post("/api/applications")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        Long applicationId = objectMapper.readTree(responseJson).get("id").asLong();
+
+        mockMvc.perform(get("/api/applications/" + applicationId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.volunteerEmail").value("testbyid@test.com"));
+    }
+
+    @Test
+    void whenGetApplicationsByVolunteer_thenReturnList() throws Exception {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(testOpportunity.getId());
+        request.setVolunteerName("Volunteer By Id");
+        request.setVolunteerEmail("volbyid@test.com");
+
+        String responseJson = mockMvc.perform(post("/api/applications")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        Long volunteerId = objectMapper.readTree(responseJson).get("volunteerId").asLong();
+
+        mockMvc.perform(get("/api/applications/volunteer/" + volunteerId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].volunteerName").value("Volunteer By Id"));
+    }
 }
