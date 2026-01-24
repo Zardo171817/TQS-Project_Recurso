@@ -8,9 +8,12 @@ import com.example.demo.entity.Volunteer;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.OpportunityRepository;
+import com.example.demo.repository.PromoterRepository;
 import com.example.demo.repository.VolunteerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.entity.ApplicationStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +24,16 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final VolunteerRepository volunteerRepository;
     private final OpportunityRepository opportunityRepository;
+    private final PromoterRepository promoterRepository;
 
     public ApplicationService(ApplicationRepository applicationRepository,
                               VolunteerRepository volunteerRepository,
-                              OpportunityRepository opportunityRepository) {
+                              OpportunityRepository opportunityRepository,
+                              PromoterRepository promoterRepository) {
         this.applicationRepository = applicationRepository;
         this.volunteerRepository = volunteerRepository;
         this.opportunityRepository = opportunityRepository;
+        this.promoterRepository = promoterRepository;
     }
 
     @Transactional
@@ -85,5 +91,25 @@ public class ApplicationService {
         return applicationRepository.findByVolunteerId(volunteerId).stream()
                 .map(ApplicationResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ApplicationResponse> getApplicationsByPromoter(Long promoterId) {
+        if (!promoterRepository.existsById(promoterId)) {
+            throw new ResourceNotFoundException("Promoter not found with id: " + promoterId);
+        }
+        return applicationRepository.findByOpportunityPromoterId(promoterId).stream()
+                .map(ApplicationResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ApplicationResponse updateApplicationStatus(Long applicationId, ApplicationStatus status) {
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Application not found with id: " + applicationId));
+        application.setStatus(status);
+        Application updated = applicationRepository.save(application);
+        return ApplicationResponse.fromEntity(updated);
     }
 }

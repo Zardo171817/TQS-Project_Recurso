@@ -15,4 +15,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Optional<Application> findByVolunteerIdAndOpportunityId(Long volunteerId, Long opportunityId);
     boolean existsByVolunteerIdAndOpportunityId(Long volunteerId, Long opportunityId);
     List<Application> findByStatus(ApplicationStatus status);
+    List<Application> findByOpportunityPromoterId(Long promoterId);
 }
