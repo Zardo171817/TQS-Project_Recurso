@@ -81,7 +81,7 @@ class VolunteerOpportunitiesE2ETest {
         createOpportunity("Tech Opportunity", "Java", "Tecnologia", 10);
         createOpportunity("Health Opportunity", "First Aid", "Saude", 15);
 
-        driver.get(baseUrl + "/volunteer-opportunities.html");
+        driver.get(baseUrl + "/opportunities.html");
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("loadingIndicator")));
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.className("opportunity-card"), 0));
 

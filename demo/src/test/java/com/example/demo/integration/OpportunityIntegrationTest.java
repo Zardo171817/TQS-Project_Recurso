@@ -1,6 +1,7 @@
 package com.example.demo.integration;
 
 import com.example.demo.dto.CreateOpportunityRequest;
+import com.example.demo.dto.UpdateOpportunityRequest;
 import com.example.demo.entity.Opportunity;
 import com.example.demo.entity.Promoter;
 import com.example.demo.repository.OpportunityRepository;
@@ -323,6 +324,89 @@ class OpportunityIntegrationTest {
                 .andExpect(jsonPath("$[0].name").value("Integration Test Promoter"))
                 .andExpect(jsonPath("$[0].email").value("integration@test.com"))
                 .andExpect(jsonPath("$[0].organization").value("Integration Test Org"));
+    }
+
+    // Feature: Editar/Cancelar Oportunidades - Integration Tests
+    @Test
+    void whenUpdateOpportunity_thenOpportunityShouldBeUpdated() throws Exception {
+        Opportunity opp = createOpportunity("Original Title", "Java", "Tecnologia", 10);
+
+        UpdateOpportunityRequest updateRequest = new UpdateOpportunityRequest();
+        updateRequest.setTitle("Updated Title");
+        updateRequest.setDescription("Updated Description here for testing");
+        updateRequest.setSkills("Python, Django");
+        updateRequest.setCategory("Educacao");
+        updateRequest.setDuration(20);
+        updateRequest.setVacancies(15);
+        updateRequest.setPoints(250);
+
+        mockMvc.perform(put("/api/opportunities/" + opp.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(opp.getId()))
+                .andExpect(jsonPath("$.title").value("Updated Title"))
+                .andExpect(jsonPath("$.description").value("Updated Description here for testing"))
+                .andExpect(jsonPath("$.skills").value("Python, Django"))
+                .andExpect(jsonPath("$.category").value("Educacao"))
+                .andExpect(jsonPath("$.duration").value(20))
+                .andExpect(jsonPath("$.vacancies").value(15))
+                .andExpect(jsonPath("$.points").value(250));
+    }
+
+    @Test
+    void whenUpdateOpportunityNotFound_thenReturnNotFound() throws Exception {
+        UpdateOpportunityRequest updateRequest = new UpdateOpportunityRequest();
+        updateRequest.setTitle("Updated Title");
+        updateRequest.setDescription("Updated Description here for testing");
+        updateRequest.setSkills("Python, Django");
+        updateRequest.setCategory("Educacao");
+        updateRequest.setDuration(20);
+        updateRequest.setVacancies(15);
+        updateRequest.setPoints(250);
+
+        mockMvc.perform(put("/api/opportunities/99999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenUpdateOpportunityWithInvalidData_thenReturnBadRequest() throws Exception {
+        Opportunity opp = createOpportunity("Original Title", "Java", "Tecnologia", 10);
+
+        UpdateOpportunityRequest updateRequest = new UpdateOpportunityRequest();
+        updateRequest.setTitle(""); // Invalid - blank
+        updateRequest.setDescription("Short"); // Invalid - too short
+        updateRequest.setSkills("");
+        updateRequest.setCategory("");
+        updateRequest.setDuration(-1); // Invalid - negative
+        updateRequest.setVacancies(-1); // Invalid - negative
+        updateRequest.setPoints(-1); // Invalid - negative
+
+        mockMvc.perform(put("/api/opportunities/" + opp.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenDeleteOpportunity_thenOpportunityShouldBeRemoved() throws Exception {
+        Opportunity opp = createOpportunity("To Delete", "Java", "Tecnologia", 10);
+        Long oppId = opp.getId();
+
+        mockMvc.perform(delete("/api/opportunities/" + oppId))
+                .andExpect(status().isNoContent());
+
+        // Verify it's deleted
+        mockMvc.perform(get("/api/opportunities/" + oppId))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenDeleteOpportunityNotFound_thenReturnNotFound() throws Exception {
+        mockMvc.perform(delete("/api/opportunities/99999"))
+                .andExpect(status().isNotFound());
     }
 
     // Helper method

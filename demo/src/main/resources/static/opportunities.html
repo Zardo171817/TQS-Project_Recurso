@@ -13,7 +13,6 @@
             <ul class="nav-links">
                 <li><a href="/index.html">Inicio</a></li>
                 <li><a href="/opportunities.html" class="active">Oportunidades</a></li>
-                <li><a href="/volunteer-opportunities.html">Buscar Oportunidades</a></li>
                 <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
             </ul>
         </div>
@@ -23,22 +22,114 @@
         <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Oportunidades de Voluntariado</h2>
 
         <div class="filters">
+            <h3 style="margin-bottom: 1rem; color: #2c3e50;">Filtrar Oportunidades</h3>
             <div class="filters-row">
                 <div class="filter-group">
-                    <label for="filterPromoter">Filtrar por Promotor:</label>
+                    <label for="filterCategory">Categoria:</label>
+                    <select id="filterCategory" class="form-control">
+                        <option value="">Todas as Categorias</option>
+                        <option value="Tecnologia">Tecnologia</option>
+                        <option value="Saude">Saude</option>
+                        <option value="Educacao">Educacao</option>
+                        <option value="Meio Ambiente">Meio Ambiente</option>
+                        <option value="Assistencia Social">Assistencia Social</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterSkills">Competencias:</label>
+                    <input type="text" id="filterSkills" class="form-control" placeholder="Ex: Java, Comunicacao...">
+                </div>
+                <div class="filter-group">
+                    <label for="filterPromoter">Promotor:</label>
                     <select id="filterPromoter" class="form-control">
                         <option value="">Todos os Promotores</option>
                     </select>
                 </div>
+            </div>
+            <div class="filters-row" style="margin-top: 1rem;">
                 <div class="filter-group">
-                    <button id="clearFilters" class="btn btn-secondary">Limpar Filtros</button>
+                    <label for="filterMinDuration">Duracao Minima (dias):</label>
+                    <input type="number" id="filterMinDuration" class="form-control" min="1" placeholder="Ex: 1">
+                </div>
+                <div class="filter-group">
+                    <label for="filterMaxDuration">Duracao Maxima (dias):</label>
+                    <input type="number" id="filterMaxDuration" class="form-control" min="1" placeholder="Ex: 30">
+                </div>
+                <div class="filter-group filter-buttons">
+                    <button id="applyFilters" class="btn btn-primary">Aplicar Filtros</button>
+                    <button id="clearFilters" class="btn btn-secondary">Limpar</button>
                 </div>
             </div>
         </div>
 
+        <div id="resultsInfo" class="results-info" style="margin: 1rem 0; color: #7f8c8d;"></div>
         <div id="messageContainer"></div>
         <div id="loadingIndicator" class="loading">Carregando oportunidades...</div>
         <div id="opportunitiesContainer" class="opportunities-grid"></div>
+
+        <!-- Edit Modal -->
+        <div id="editModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal" id="closeModal">&times;</span>
+                <h3>Editar Oportunidade</h3>
+                <form id="editForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-group">
+                        <label for="editTitle">Titulo:</label>
+                        <input type="text" id="editTitle" class="form-control" required minlength="3" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Descricao:</label>
+                        <textarea id="editDescription" class="form-control" required minlength="10" maxlength="1000" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSkills">Habilidades:</label>
+                        <input type="text" id="editSkills" class="form-control" required minlength="3" maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCategory">Categoria:</label>
+                        <select id="editCategory" class="form-control" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="Tecnologia">Tecnologia</option>
+                            <option value="Saude">Saude</option>
+                            <option value="Educacao">Educacao</option>
+                            <option value="Meio Ambiente">Meio Ambiente</option>
+                            <option value="Assistencia Social">Assistencia Social</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDuration">Duracao (dias):</label>
+                        <input type="number" id="editDuration" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editVacancies">Vagas:</label>
+                        <input type="number" id="editVacancies" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPoints">Pontos:</label>
+                        <input type="number" id="editPoints" class="form-control" required min="0">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Salvar Alteracoes</button>
+                        <button type="button" class="btn btn-secondary" id="cancelEdit">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="deleteModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>Confirmar Cancelamento</h3>
+                <p>Tem certeza que deseja cancelar esta oportunidade?</p>
+                <p><strong id="deleteOpportunityTitle"></strong></p>
+                <input type="hidden" id="deleteId">
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Sim, Cancelar</button>
+                    <button type="button" class="btn btn-secondary" id="cancelDelete">Nao</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer>

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.CreateOpportunityRequest;
 import com.example.demo.dto.OpportunityFilterRequest;
 import com.example.demo.dto.OpportunityResponse;
+import com.example.demo.dto.UpdateOpportunityRequest;
 import com.example.demo.entity.Opportunity;
 import com.example.demo.entity.Promoter;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -103,5 +104,31 @@ public class OpportunityService {
     @Transactional(readOnly = true)
     public List<String> getAllCategories() {
         return opportunityRepository.findAllCategories();
+    }
+
+    @Transactional
+    public OpportunityResponse updateOpportunity(Long id, UpdateOpportunityRequest request) {
+        Opportunity opportunity = opportunityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Opportunity not found with id: " + id));
+
+        opportunity.setTitle(request.getTitle());
+        opportunity.setDescription(request.getDescription());
+        opportunity.setSkills(request.getSkills());
+        opportunity.setCategory(request.getCategory());
+        opportunity.setDuration(request.getDuration());
+        opportunity.setVacancies(request.getVacancies());
+        opportunity.setPoints(request.getPoints());
+
+        Opportunity updatedOpportunity = opportunityRepository.save(opportunity);
+        return OpportunityResponse.fromEntity(updatedOpportunity);
+    }
+
+    @Transactional
+    public void deleteOpportunity(Long id) {
+        if (!opportunityRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Opportunity not found with id: " + id);
+        }
+        opportunityRepository.deleteById(id);
     }
 }
