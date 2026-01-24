@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class Promoter {
     @Column(nullable = false)
     private String organization;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "promoter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Opportunity> opportunities = new ArrayList<>();
 }

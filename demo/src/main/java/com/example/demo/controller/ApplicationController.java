@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ApplicationResponse;
 import com.example.demo.dto.CreateApplicationRequest;
+import com.example.demo.entity.ApplicationStatus;
 import com.example.demo.service.ApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -45,5 +46,20 @@ public class ApplicationController {
             @PathVariable Long volunteerId) {
         List<ApplicationResponse> responses = applicationService.getApplicationsByVolunteer(volunteerId);
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/promoter/{promoterId}")
+    public ResponseEntity<List<ApplicationResponse>> getApplicationsByPromoter(
+            @PathVariable Long promoterId) {
+        List<ApplicationResponse> responses = applicationService.getApplicationsByPromoter(promoterId);
+        return ResponseEntity.ok(responses);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ApplicationResponse> updateApplicationStatus(
+            @PathVariable Long id,
+            @RequestParam ApplicationStatus status) {
+        ApplicationResponse response = applicationService.updateApplicationStatus(id, status);
+        return ResponseEntity.ok(response);
     }
 }

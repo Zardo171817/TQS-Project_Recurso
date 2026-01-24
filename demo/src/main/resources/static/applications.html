@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidaturas Recebidas - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .application-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .application-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .application-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .application-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            flex: 1;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-PENDING {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .status-ACCEPTED {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .status-REJECTED {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .volunteer-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .volunteer-info p {
+            margin: 0.5rem 0;
+            color: #555;
+        }
+
+        .volunteer-info strong {
+            color: #2c3e50;
+        }
+
+        .motivation-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .motivation-section h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .motivation-text {
+            color: #555;
+            font-style: italic;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+
+        .application-footer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .application-date {
+            color: #95a5a6;
+            font-size: 0.85rem;
+        }
+
+        .application-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .promoter-select {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .promoter-select h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .promoter-select-row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .promoter-select-row .filter-group {
+            flex: 1;
+        }
+
+        .applications-list {
+            margin-top: 2rem;
+        }
+
+        .opportunity-link {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .opportunity-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Inicio</a></li>
+                <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
+                <li><a href="/applications.html" class="active">Candidaturas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Candidaturas Recebidas</h2>
+
+        <div class="promoter-select">
+            <h3>Selecione o Promotor</h3>
+            <div class="promoter-select-row">
+                <div class="filter-group">
+                    <label for="promoterSelect">Promotor:</label>
+                    <select id="promoterSelect" class="form-control">
+                        <option value="">Selecione um promotor</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Filtrar por Status:</label>
+                    <select id="statusFilter" class="form-control">
+                        <option value="">Todos os Status</option>
+                        <option value="PENDING">Pendente</option>
+                        <option value="ACCEPTED">Aceite</option>
+                        <option value="REJECTED">Rejeitado</option>
+                    </select>
+                </div>
+                <div class="filter-group filter-buttons">
+                    <button id="loadApplications" class="btn btn-primary">Carregar Candidaturas</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsInfo" class="results-info" style="margin: 1rem 0; color: #7f8c8d;"></div>
+        <div id="messageContainer"></div>
+        <div id="loadingIndicator" class="loading" style="display: none;">Carregando candidaturas...</div>
+        <div id="applicationsContainer" class="applications-list"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/applications.js"></script>
+</body>
+</html>

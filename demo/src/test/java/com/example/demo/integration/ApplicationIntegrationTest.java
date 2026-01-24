@@ -186,4 +186,76 @@ class ApplicationIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].volunteerName").value("Volunteer By Id"));
     }
+
+    // Feature: Ver Candidaturas Recebidas pelo Promotor - Integration Tests
+    @Test
+    void whenGetApplicationsByPromoter_thenReturnList() throws Exception {
+        CreateApplicationRequest request = new CreateApplicationRequest();
+        request.setOpportunityId(testOpportunity.getId());
+        request.setVolunteerName("Promoter View Volunteer");
+        request.setVolunteerEmail("promoterview@test.com");
+        request.setMotivation("Testing promoter view");
+
+        mockMvc.perform(post("/api/applications")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        Long promoterId = testOpportunity.getPromoter().getId();
+
+        mockMvc.perform(get("/api/applications/promoter/" + promoterId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].volunteerName").value("Promoter View Volunteer"))
+                .andExpect(jsonPath("$[0].opportunityTitle").value("Test Opportunity"));
+    }
+
+    @Test
+    void whenGetApplicationsByPromoterNotFound_thenReturnNotFound() throws Exception {
+        mockMvc.perform(get("/api/applications/promoter/999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenGetApplicationsByPromoterWithMultipleOpportunities_thenReturnAllApplications() throws Exception {
+        // Create second opportunity for same promoter
+        Opportunity secondOpportunity = new Opportunity();
+        secondOpportunity.setTitle("Second Test Opportunity");
+        secondOpportunity.setDescription("Second Description for integration");
+        secondOpportunity.setSkills("Python, Django");
+        secondOpportunity.setCategory("Educacao");
+        secondOpportunity.setDuration(15);
+        secondOpportunity.setVacancies(3);
+        secondOpportunity.setPoints(150);
+        secondOpportunity.setPromoter(testOpportunity.getPromoter());
+        secondOpportunity = opportunityRepository.save(secondOpportunity);
+
+        // Create application for first opportunity
+        CreateApplicationRequest request1 = new CreateApplicationRequest();
+        request1.setOpportunityId(testOpportunity.getId());
+        request1.setVolunteerName("First Volunteer");
+        request1.setVolunteerEmail("first@test.com");
+
+        mockMvc.perform(post("/api/applications")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request1)))
+                .andExpect(status().isCreated());
+
+        // Create application for second opportunity
+        CreateApplicationRequest request2 = new CreateApplicationRequest();
+        request2.setOpportunityId(secondOpportunity.getId());
+        request2.setVolunteerName("Second Volunteer");
+        request2.setVolunteerEmail("second@test.com");
+
+        mockMvc.perform(post("/api/applications")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request2)))
+                .andExpect(status().isCreated());
+
+        Long promoterId = testOpportunity.getPromoter().getId();
+
+        mockMvc.perform(get("/api/applications/promoter/" + promoterId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
 }

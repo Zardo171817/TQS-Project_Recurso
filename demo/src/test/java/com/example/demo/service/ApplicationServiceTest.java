@@ -7,8 +7,10 @@ import com.example.demo.entity.ApplicationStatus;
 import com.example.demo.entity.Opportunity;
 import com.example.demo.entity.Volunteer;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.entity.Promoter;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.OpportunityRepository;
+import com.example.demo.repository.PromoterRepository;
 import com.example.demo.repository.VolunteerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,18 +42,29 @@ class ApplicationServiceTest {
     @Mock
     private OpportunityRepository opportunityRepository;
 
+    @Mock
+    private PromoterRepository promoterRepository;
+
     @InjectMocks
     private ApplicationService applicationService;
 
     private Opportunity testOpportunity;
     private Volunteer testVolunteer;
     private Application testApplication;
+    private Promoter testPromoter;
 
     @BeforeEach
     void setUp() {
+        testPromoter = new Promoter();
+        testPromoter.setId(1L);
+        testPromoter.setName("Test Promoter");
+        testPromoter.setEmail("promoter@test.com");
+        testPromoter.setOrganization("Test Org");
+
         testOpportunity = new Opportunity();
         testOpportunity.setId(1L);
         testOpportunity.setTitle("Test Opportunity");
+        testOpportunity.setPromoter(testPromoter);
 
         testVolunteer = new Volunteer();
         testVolunteer.setId(1L);
@@ -193,5 +206,60 @@ class ApplicationServiceTest {
 
         assertThrows(ResourceNotFoundException.class, () ->
             applicationService.createApplication(request));
+    }
+
+    // Feature: Ver Candidaturas Recebidas pelo Promotor
+    @Test
+    void whenGetApplicationsByPromoter_thenReturnList() {
+        when(promoterRepository.existsById(1L)).thenReturn(true);
+        when(applicationRepository.findByOpportunityPromoterId(1L)).thenReturn(Arrays.asList(testApplication));
+
+        List<ApplicationResponse> responses = applicationService.getApplicationsByPromoter(1L);
+
+        assertEquals(1, responses.size());
+        assertEquals("Test Opportunity", responses.get(0).getOpportunityTitle());
+        assertEquals("Test Volunteer", responses.get(0).getVolunteerName());
+    }
+
+    @Test
+    void whenGetApplicationsByPromoterNotFound_thenThrowException() {
+        when(promoterRepository.existsById(999L)).thenReturn(false);
+
+        assertThrows(ResourceNotFoundException.class, () ->
+            applicationService.getApplicationsByPromoter(999L));
+    }
+
+    @Test
+    void whenGetApplicationsByPromoterWithMultipleApplications_thenReturnAllApplications() {
+        Volunteer secondVolunteer = new Volunteer();
+        secondVolunteer.setId(2L);
+        secondVolunteer.setName("Second Volunteer");
+        secondVolunteer.setEmail("second@test.com");
+
+        Application secondApplication = new Application();
+        secondApplication.setId(2L);
+        secondApplication.setVolunteer(secondVolunteer);
+        secondApplication.setOpportunity(testOpportunity);
+        secondApplication.setStatus(ApplicationStatus.PENDING);
+        secondApplication.setMotivation("I also want to help");
+        secondApplication.setAppliedAt(LocalDateTime.now());
+
+        when(promoterRepository.existsById(1L)).thenReturn(true);
+        when(applicationRepository.findByOpportunityPromoterId(1L))
+                .thenReturn(Arrays.asList(testApplication, secondApplication));
+
+        List<ApplicationResponse> responses = applicationService.getApplicationsByPromoter(1L);
+
+        assertEquals(2, responses.size());
+    }
+
+    @Test
+    void whenGetApplicationsByPromoterWithNoApplications_thenReturnEmptyList() {
+        when(promoterRepository.existsById(1L)).thenReturn(true);
+        when(applicationRepository.findByOpportunityPromoterId(1L)).thenReturn(Arrays.asList());
+
+        List<ApplicationResponse> responses = applicationService.getApplicationsByPromoter(1L);
+
+        assertTrue(responses.isEmpty());
     }
 }
