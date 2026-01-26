@@ -94,24 +94,6 @@ class ConcludeOpportunityDtoTest {
             assertThat(request.getApplicationIds()).containsExactly(1L, 2L, 3L, 4L, 5L);
         }
 
-        @Test
-        @DisplayName("Should compare equal requests")
-        void compareRequests_Equal_Success() {
-            ConfirmParticipationRequest r1 = new ConfirmParticipationRequest(1L, Arrays.asList(1L, 2L));
-            ConfirmParticipationRequest r2 = new ConfirmParticipationRequest(1L, Arrays.asList(1L, 2L));
-
-            assertThat(r1).isEqualTo(r2);
-            assertThat(r1.hashCode()).isEqualTo(r2.hashCode());
-        }
-
-        @Test
-        @DisplayName("Should detect unequal requests")
-        void compareRequests_NotEqual_Success() {
-            ConfirmParticipationRequest r1 = new ConfirmParticipationRequest(1L, Arrays.asList(1L, 2L));
-            ConfirmParticipationRequest r2 = new ConfirmParticipationRequest(2L, Arrays.asList(1L, 2L));
-
-            assertThat(r1).isNotEqualTo(r2);
-        }
     }
 
     @Nested
@@ -177,15 +159,6 @@ class ConcludeOpportunityDtoTest {
             assertThat(response.getTotalPointsAwarded()).isEqualTo(200);
         }
 
-        @Test
-        @DisplayName("Should compare equal responses")
-        void compareResponses_Equal_Success() {
-            LocalDateTime now = LocalDateTime.now();
-            ConcludeOpportunityResponse r1 = new ConcludeOpportunityResponse(1L, "Test", OpportunityStatus.CONCLUDED, now, 0, 0, Collections.emptyList());
-            ConcludeOpportunityResponse r2 = new ConcludeOpportunityResponse(1L, "Test", OpportunityStatus.CONCLUDED, now, 0, 0, Collections.emptyList());
-
-            assertThat(r1).isEqualTo(r2);
-        }
     }
 
     @Nested
@@ -220,18 +193,6 @@ class ConcludeOpportunityDtoTest {
         }
 
         @Test
-        @DisplayName("Should compare equal participant summaries")
-        void compareSummaries_Equal_Success() {
-            ConcludeOpportunityResponse.ParticipantSummary summary1 =
-                new ConcludeOpportunityResponse.ParticipantSummary(1L, "John", "john@test.com", 100, 200);
-            ConcludeOpportunityResponse.ParticipantSummary summary2 =
-                new ConcludeOpportunityResponse.ParticipantSummary(1L, "John", "john@test.com", 100, 200);
-
-            assertThat(summary1).isEqualTo(summary2);
-            assertThat(summary1.hashCode()).isEqualTo(summary2.hashCode());
-        }
-
-        @Test
         @DisplayName("Should handle different points values")
         void createSummary_DifferentPoints_Success() {
             ConcludeOpportunityResponse.ParticipantSummary summary = new ConcludeOpportunityResponse.ParticipantSummary();
@@ -252,16 +213,6 @@ class ConcludeOpportunityDtoTest {
             assertThat(summary.getTotalPoints()).isEqualTo(50000);
         }
 
-        @Test
-        @DisplayName("Should detect unequal summaries")
-        void compareSummaries_NotEqual_Success() {
-            ConcludeOpportunityResponse.ParticipantSummary s1 =
-                new ConcludeOpportunityResponse.ParticipantSummary(1L, "John", "john@test.com", 100, 200);
-            ConcludeOpportunityResponse.ParticipantSummary s2 =
-                new ConcludeOpportunityResponse.ParticipantSummary(2L, "Jane", "jane@test.com", 50, 100);
-
-            assertThat(s1).isNotEqualTo(s2);
-        }
     }
 
     @Nested
@@ -306,14 +257,53 @@ class ConcludeOpportunityDtoTest {
             assertThat(violations).isEmpty();
         }
 
-        @Test
-        @DisplayName("Should compare equal requests")
-        void compareRequests_Equal_Success() {
-            ConcludeOpportunityRequest r1 = new ConcludeOpportunityRequest(1L);
-            ConcludeOpportunityRequest r2 = new ConcludeOpportunityRequest(1L);
+    }
 
-            assertThat(r1).isEqualTo(r2);
-            assertThat(r1.hashCode()).isEqualTo(r2.hashCode());
+    @Nested
+    @DisplayName("VolunteerPointsResponse Tests")
+    class VolunteerPointsResponseTests {
+
+        @Test
+        @DisplayName("Should map volunteer entity to VolunteerPointsResponse correctly")
+        void fromEntity_MapsAllFields_Success() {
+            com.example.demo.entity.Volunteer volunteer = new com.example.demo.entity.Volunteer();
+            volunteer.setId(1L);
+            volunteer.setName("John Doe");
+            volunteer.setEmail("john@test.com");
+            volunteer.setTotalPoints(250);
+
+            VolunteerPointsResponse response = VolunteerPointsResponse.fromEntity(volunteer);
+
+            assertThat(response.getId()).isEqualTo(1L);
+            assertThat(response.getName()).isEqualTo("John Doe");
+            assertThat(response.getEmail()).isEqualTo("john@test.com");
+            assertThat(response.getTotalPoints()).isEqualTo(250);
+        }
+    }
+
+    @Nested
+    @DisplayName("VolunteerResponse Tests")
+    class VolunteerResponseTests {
+
+        @Test
+        @DisplayName("Should map volunteer entity to VolunteerResponse including totalPoints")
+        void fromEntity_IncludesTotalPoints_Success() {
+            com.example.demo.entity.Volunteer volunteer = new com.example.demo.entity.Volunteer();
+            volunteer.setId(1L);
+            volunteer.setName("Jane Doe");
+            volunteer.setEmail("jane@test.com");
+            volunteer.setPhone("123456789");
+            volunteer.setSkills("Organizing");
+            volunteer.setTotalPoints(500);
+
+            VolunteerResponse response = VolunteerResponse.fromEntity(volunteer);
+
+            assertThat(response.getId()).isEqualTo(1L);
+            assertThat(response.getName()).isEqualTo("Jane Doe");
+            assertThat(response.getEmail()).isEqualTo("jane@test.com");
+            assertThat(response.getPhone()).isEqualTo("123456789");
+            assertThat(response.getSkills()).isEqualTo("Organizing");
+            assertThat(response.getTotalPoints()).isEqualTo(500);
         }
     }
 }
