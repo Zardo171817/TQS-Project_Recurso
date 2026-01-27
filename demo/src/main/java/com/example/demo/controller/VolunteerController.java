@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ApplicationResponse;
+import com.example.demo.dto.PointsHistoryResponse;
 import com.example.demo.dto.VolunteerPointsResponse;
 import com.example.demo.dto.VolunteerResponse;
 import com.example.demo.service.VolunteerService;
@@ -65,5 +66,11 @@ public class VolunteerController {
     public ResponseEntity<List<ApplicationResponse>> getConfirmedParticipations(@PathVariable Long id) {
         List<ApplicationResponse> participations = volunteerService.getConfirmedParticipations(id);
         return ResponseEntity.ok(participations);
+    }
+
+    @GetMapping("/{id}/points-history")
+    public ResponseEntity<List<PointsHistoryResponse>> getPointsHistory(@PathVariable Long id) {
+        List<PointsHistoryResponse> history = volunteerService.getPointsHistory(id);
+        return ResponseEntity.ok(history);
     }
 }
