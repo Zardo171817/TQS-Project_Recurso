@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo de Beneficios - Marketplace de Voluntariado</title>
+    <title>Resgatar Pontos - Marketplace de Voluntariado</title>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
         .volunteer-login {
@@ -63,36 +63,43 @@
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
-        .filters-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
             margin-bottom: 2rem;
         }
 
-        .filters-section h3 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
+        .stat-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
-        .filters-row {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-end;
-            flex-wrap: wrap;
+        .stat-card .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #3498db;
         }
 
-        .filter-group {
-            flex: 1;
-            min-width: 150px;
+        .stat-card .stat-label {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
         }
 
-        .filter-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #2c3e50;
+        .stat-card.spent .stat-value {
+            color: #e74c3c;
+        }
+
+        .stat-card.redeemed .stat-value {
+            color: #27ae60;
+        }
+
+        .stat-card.available .stat-value {
+            color: #f39c12;
         }
 
         .benefits-grid {
@@ -211,60 +218,30 @@
             color: #e74c3c;
         }
 
-        .status-badge {
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
+        .btn-redeem {
+            padding: 0.5rem 1.25rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .status-badge.can-redeem {
-            background: #d4edda;
-            color: #155724;
+        .btn-redeem.can-redeem {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
         }
 
-        .status-badge.cannot-redeem {
-            background: #f8d7da;
-            color: #721c24;
+        .btn-redeem.can-redeem:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
         }
 
-        .stats-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.25rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .stat-card .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #3498db;
-        }
-
-        .stat-card .stat-label {
+        .btn-redeem.cannot-redeem {
+            background: #bdc3c7;
             color: #7f8c8d;
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-        }
-
-        .stat-card.affordable .stat-value {
-            color: #27ae60;
-        }
-
-        .stat-card.ua .stat-value {
-            color: #e74c3c;
-        }
-
-        .stat-card.partner .stat-value {
-            color: #9b59b6;
+            cursor: not-allowed;
         }
 
         .empty-state {
@@ -283,30 +260,109 @@
             color: #7f8c8d;
         }
 
-        .sort-buttons {
+        .history-section {
+            margin-top: 2rem;
+        }
+
+        .history-section h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .history-list {
             display: flex;
-            gap: 0.5rem;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .sort-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
+        .history-card {
             background: white;
-            border-radius: 5px;
+            padding: 1.25rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .history-card .history-info h4 {
+            margin: 0 0 0.25rem 0;
+            color: #2c3e50;
+        }
+
+        .history-card .history-info p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+
+        .history-card .history-points {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .modal p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-buttons .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        .sort-btn:hover {
-            border-color: #3498db;
-            color: #3498db;
-        }
-
-        .sort-btn.active {
-            background: #3498db;
+        .modal-buttons .btn-confirm {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: white;
-            border-color: #3498db;
+        }
+
+        .modal-buttons .btn-cancel {
+            background: #ecf0f1;
+            color: #2c3e50;
         }
 
         .results-info {
@@ -322,6 +378,13 @@
             color: #7f8c8d;
             font-size: 0.95rem;
         }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
     </style>
 </head>
 <body>
@@ -336,8 +399,8 @@
                 <li><a href="/volunteer-applications.html">Minhas Candidaturas</a></li>
                 <li><a href="/volunteer-points.html">Meus Pontos</a></li>
                 <li><a href="/volunteer-points-history.html">Historico Pontos</a></li>
-                <li><a href="/benefits-catalog.html" class="active">Catalogo Beneficios</a></li>
-                <li><a href="/redeem-points.html">Resgatar Pontos</a></li>
+                <li><a href="/benefits-catalog.html">Catalogo Beneficios</a></li>
+                <li><a href="/redeem-points.html" class="active">Resgatar Pontos</a></li>
                 <li><a href="/conclude-opportunity.html">Concluir Oportunidade</a></li>
                 <li><a href="/volunteer-ranking.html">Ranking</a></li>
             </ul>
@@ -345,25 +408,25 @@
     </nav>
 
     <main class="container">
-        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Catalogo de Beneficios</h2>
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Resgatar Pontos por Beneficios</h2>
 
         <div class="volunteer-login">
             <h3>Identificar Voluntario</h3>
             <div class="volunteer-login-row">
                 <div class="filter-group">
                     <label for="volunteerEmail">Email do Voluntario:</label>
-                    <input type="email" id="volunteerEmail" class="form-control" placeholder="Digite seu email para ver beneficios disponiveis">
+                    <input type="email" id="volunteerEmail" class="form-control" placeholder="Digite seu email para resgatar pontos">
                 </div>
                 <div class="filter-group filter-buttons">
-                    <button id="loadCatalog" class="btn btn-primary">Ver Catalogo</button>
+                    <button id="loadRedeemPage" class="btn btn-primary">Carregar</button>
                 </div>
             </div>
         </div>
 
         <div id="messageContainer"></div>
-        <div id="loadingIndicator" class="loading" style="display: none;">Carregando catalogo de beneficios...</div>
+        <div id="loadingIndicator" class="loading" style="display: none;">Carregando beneficios disponiveis...</div>
 
-        <div id="catalogContent" style="display: none;">
+        <div id="redeemContent" style="display: none;">
             <div id="volunteerInfoHeader" class="volunteer-info-header">
                 <div class="volunteer-details">
                     <h3 id="volunteerName"></h3>
@@ -373,67 +436,47 @@
             </div>
 
             <div class="stats-summary" id="statsSummary">
+                <div class="stat-card available">
+                    <div class="stat-value" id="availablePoints">0</div>
+                    <div class="stat-label">Pontos Disponiveis</div>
+                </div>
+                <div class="stat-card spent">
+                    <div class="stat-value" id="totalSpent">0</div>
+                    <div class="stat-label">Pontos Gastos</div>
+                </div>
+                <div class="stat-card redeemed">
+                    <div class="stat-value" id="totalRedeemed">0</div>
+                    <div class="stat-label">Beneficios Resgatados</div>
+                </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalBenefits">0</div>
-                    <div class="stat-label">Total de Beneficios</div>
-                </div>
-                <div class="stat-card affordable">
-                    <div class="stat-value" id="affordableBenefits">0</div>
+                    <div class="stat-value" id="affordableCount">0</div>
                     <div class="stat-label">Posso Resgatar</div>
-                </div>
-                <div class="stat-card ua">
-                    <div class="stat-value" id="uaBenefits">0</div>
-                    <div class="stat-label">Beneficios UA</div>
-                </div>
-                <div class="stat-card partner">
-                    <div class="stat-value" id="partnerBenefits">0</div>
-                    <div class="stat-label">Beneficios Parceiros</div>
-                </div>
-            </div>
-
-            <div class="filters-section">
-                <h3>Filtrar Beneficios</h3>
-                <div class="filters-row">
-                    <div class="filter-group">
-                        <label for="categoryFilter">Categoria:</label>
-                        <select id="categoryFilter" class="form-control">
-                            <option value="">Todas as categorias</option>
-                            <option value="UA">UA (Universidade de Aveiro)</option>
-                            <option value="PARTNER">Parceiros</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="providerFilter">Fornecedor:</label>
-                        <select id="providerFilter" class="form-control">
-                            <option value="">Todos os fornecedores</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="affordableFilter">Disponibilidade:</label>
-                        <select id="affordableFilter" class="form-control">
-                            <option value="">Todos</option>
-                            <option value="affordable">Posso resgatar</option>
-                            <option value="not-affordable">Preciso de mais pontos</option>
-                        </select>
-                    </div>
-                    <div class="filter-group filter-buttons">
-                        <button id="applyFilters" class="btn btn-primary">Filtrar</button>
-                        <button id="clearFilters" class="btn btn-secondary">Limpar</button>
-                    </div>
                 </div>
             </div>
 
             <div class="results-info">
                 <div class="results-count" id="resultsCount">Mostrando 0 beneficios</div>
-                <div class="sort-buttons">
-                    <button class="sort-btn active" data-sort="points-asc">Pontos (Menor)</button>
-                    <button class="sort-btn" data-sort="points-desc">Pontos (Maior)</button>
-                </div>
             </div>
 
             <div id="benefitsContainer" class="benefits-grid"></div>
+
+            <div class="history-section" id="historySection" style="display: none;">
+                <h3>Historico de Resgates</h3>
+                <div id="historyContainer" class="history-list"></div>
+            </div>
         </div>
     </main>
+
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <h3>Confirmar Resgate</h3>
+            <p id="confirmMessage"></p>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" id="cancelRedeem">Cancelar</button>
+                <button class="btn btn-confirm" id="confirmRedeem">Confirmar Resgate</button>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
@@ -441,6 +484,6 @@
         </div>
     </footer>
 
-    <script src="/js/benefits-catalog.js"></script>
+    <script src="/js/redeem-points.js"></script>
 </body>
 </html>
