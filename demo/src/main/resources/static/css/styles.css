@@ -297,6 +297,18 @@ main {
     border: 1px solid #f5c6cb;
 }
 
+.message.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
 /* Footer */
 footer {
     background-color: #2c3e50;

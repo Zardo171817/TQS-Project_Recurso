@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showMessage(message, type) {
-        messageContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        messageContainer.innerHTML = `<div class="message ${type}">${message}</div>`;
     }
 
     function clearMessage() {
