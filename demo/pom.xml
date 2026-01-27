@@ -153,47 +153,6 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version>
-				<configuration>
-					<excludes>
-						<exclude>com/example/demo/DemoApplication.class</exclude>
-						<exclude>com/example/demo/controller/RedemptionController.class</exclude>
-						<exclude>com/example/demo/controller/OpportunityController.class</exclude>
-						<exclude>com/example/demo/controller/VolunteerController.class</exclude>
-						<exclude>com/example/demo/controller/ApplicationController.class</exclude>
-						<exclude>com/example/demo/controller/PromoterController.class</exclude>
-						<exclude>com/example/demo/service/RedemptionService.class</exclude>
-						<exclude>com/example/demo/service/OpportunityService.class</exclude>
-						<exclude>com/example/demo/service/VolunteerService.class</exclude>
-						<exclude>com/example/demo/service/ApplicationService.class</exclude>
-						<exclude>com/example/demo/entity/Volunteer.class</exclude>
-						<exclude>com/example/demo/entity/Redemption.class</exclude>
-						<exclude>com/example/demo/entity/Redemption$RedemptionStatus.class</exclude>
-						<exclude>com/example/demo/entity/Promoter.class</exclude>
-						<exclude>com/example/demo/entity/Opportunity.class</exclude>
-						<exclude>com/example/demo/entity/Application.class</exclude>
-						<exclude>com/example/demo/entity/OpportunityStatus.class</exclude>
-						<exclude>com/example/demo/entity/ApplicationStatus.class</exclude>
-						<exclude>com/example/demo/dto/RedeemPointsRequest.class</exclude>
-						<exclude>com/example/demo/dto/RedemptionResponse.class</exclude>
-						<exclude>com/example/demo/dto/OpportunityResponse.class</exclude>
-						<exclude>com/example/demo/dto/VolunteerResponse.class</exclude>
-						<exclude>com/example/demo/dto/VolunteerPointsResponse.class</exclude>
-						<exclude>com/example/demo/dto/ApplicationResponse.class</exclude>
-						<exclude>com/example/demo/dto/PointsHistoryResponse.class</exclude>
-						<exclude>com/example/demo/dto/ConcludeOpportunityResponse*.class</exclude>
-						<exclude>com/example/demo/dto/CreateOpportunityRequest.class</exclude>
-						<exclude>com/example/demo/dto/UpdateOpportunityRequest.class</exclude>
-						<exclude>com/example/demo/dto/BaseOpportunityRequest.class</exclude>
-						<exclude>com/example/demo/dto/CreateApplicationRequest.class</exclude>
-						<exclude>com/example/demo/dto/ConfirmParticipationRequest.class</exclude>
-						<exclude>com/example/demo/dto/OpportunityFilterRequest.class</exclude>
-						<exclude>com/example/demo/dto/BenefitRedemptionDetailResponse.class</exclude>
-						<exclude>com/example/demo/dto/PartnerRedemptionStatsResponse.class</exclude>
-						<exclude>com/example/demo/specification/**</exclude>
-						<exclude>com/example/demo/config/**</exclude>
-						<exclude>com/example/demo/repository/**</exclude>
-					</excludes>
-				</configuration>
 				<executions>
 					<execution>
 						<goals>
