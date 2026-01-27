@@ -220,11 +220,12 @@ class ConcludeOpportunityDtoTest {
     class ConcludeOpportunityRequestTests {
 
         @Test
-        @DisplayName("Should create request with promoter ID")
+        @DisplayName("Should create request with promoter ID and application IDs")
         void createRequest_WithPromoterId_Success() {
-            ConcludeOpportunityRequest request = new ConcludeOpportunityRequest(1L);
+            ConcludeOpportunityRequest request = new ConcludeOpportunityRequest(1L, java.util.Arrays.asList(1L, 2L));
 
             assertThat(request.getPromoterId()).isEqualTo(1L);
+            assertThat(request.getApplicationIds()).containsExactly(1L, 2L);
         }
 
         @Test
@@ -239,7 +240,7 @@ class ConcludeOpportunityDtoTest {
         @Test
         @DisplayName("Should fail validation when promoter ID is null")
         void validateRequest_NullPromoterId_Fails() {
-            ConcludeOpportunityRequest request = new ConcludeOpportunityRequest(null);
+            ConcludeOpportunityRequest request = new ConcludeOpportunityRequest(null, java.util.Arrays.asList(1L));
 
             Set<ConstraintViolation<ConcludeOpportunityRequest>> violations = validator.validate(request);
 
@@ -250,7 +251,7 @@ class ConcludeOpportunityDtoTest {
         @Test
         @DisplayName("Should pass validation with valid promoter ID")
         void validateRequest_ValidPromoterId_Passes() {
-            ConcludeOpportunityRequest request = new ConcludeOpportunityRequest(1L);
+            ConcludeOpportunityRequest request = new ConcludeOpportunityRequest(1L, java.util.Arrays.asList(1L, 2L));
 
             Set<ConstraintViolation<ConcludeOpportunityRequest>> violations = validator.validate(request);
 
