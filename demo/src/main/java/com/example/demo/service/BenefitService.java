@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BenefitResponse;
+import com.example.demo.dto.CreateBenefitRequest;
+import com.example.demo.dto.UpdateBenefitRequest;
 import com.example.demo.entity.Benefit;
 import com.example.demo.entity.Benefit.BenefitCategory;
 import com.example.demo.exception.ResourceNotFoundException;
@@ -87,6 +89,77 @@ public class BenefitService {
             throw new ResourceNotFoundException("Volunteer not found with id: " + volunteerId);
         }
         return benefitRepository.findByActiveTrueOrderByPointsRequiredAsc().stream()
+                .map(BenefitResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public BenefitResponse createPartnerBenefit(CreateBenefitRequest request) {
+        Benefit benefit = new Benefit();
+        benefit.setName(request.getName());
+        benefit.setDescription(request.getDescription());
+        benefit.setPointsRequired(request.getPointsRequired());
+        benefit.setCategory(BenefitCategory.PARTNER);
+        benefit.setProvider(request.getProvider());
+        benefit.setImageUrl(request.getImageUrl());
+
+        Benefit saved = benefitRepository.save(benefit);
+        return BenefitResponse.fromEntity(saved);
+    }
+
+    @Transactional
+    public BenefitResponse updatePartnerBenefit(Long id, UpdateBenefitRequest request) {
+        Benefit benefit = benefitRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Benefit not found with id: " + id));
+
+        if (benefit.getCategory() != BenefitCategory.PARTNER) {
+            throw new IllegalStateException("Only PARTNER benefits can be updated by partners");
+        }
+
+        if (request.getName() != null) {
+            benefit.setName(request.getName());
+        }
+        if (request.getDescription() != null) {
+            benefit.setDescription(request.getDescription());
+        }
+        if (request.getPointsRequired() != null) {
+            benefit.setPointsRequired(request.getPointsRequired());
+        }
+        if (request.getProvider() != null) {
+            benefit.setProvider(request.getProvider());
+        }
+        if (request.getImageUrl() != null) {
+            benefit.setImageUrl(request.getImageUrl());
+        }
+
+        Benefit updated = benefitRepository.save(benefit);
+        return BenefitResponse.fromEntity(updated);
+    }
+
+    @Transactional
+    public void deactivatePartnerBenefit(Long id) {
+        Benefit benefit = benefitRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Benefit not found with id: " + id));
+
+        if (benefit.getCategory() != BenefitCategory.PARTNER) {
+            throw new IllegalStateException("Only PARTNER benefits can be deactivated by partners");
+        }
+
+        benefit.setActive(false);
+        benefitRepository.save(benefit);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BenefitResponse> getPartnerBenefits() {
+        return benefitRepository.findByCategoryAndActiveTrue(BenefitCategory.PARTNER).stream()
+                .map(BenefitResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<BenefitResponse> getPartnerBenefitsByProvider(String provider) {
+        return benefitRepository.findByProviderContainingIgnoreCaseAndActiveTrue(provider).stream()
+                .filter(b -> b.getCategory() == BenefitCategory.PARTNER)
                 .map(BenefitResponse::fromEntity)
                 .collect(Collectors.toList());
     }

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Beneficios Parceiro - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .partner-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .form-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #9b59b6;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #9b59b6;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-partner {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-partner:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+        }
+
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+
+        .benefits-list-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .benefits-list-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #9b59b6;
+        }
+
+        .partner-benefit-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #9b59b6;
+            transition: transform 0.2s;
+        }
+
+        .partner-benefit-card:hover {
+            transform: translateX(5px);
+        }
+
+        .partner-benefit-card h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .partner-benefit-card .benefit-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .partner-benefit-card .benefit-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .partner-benefit-card .points-tag {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 0.3rem 0.75rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .partner-benefit-card .provider-tag {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+
+        .partner-benefit-card .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-remove {
+            background: #e74c3c;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #c0392b;
+        }
+
+        .empty-list {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .empty-list p {
+            margin-top: 0.5rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-item .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #9b59b6;
+        }
+
+        .stat-item .stat-label {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .field-error {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .partner-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Inicio</a></li>
+                <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
+                <li><a href="/applications.html">Candidaturas Promotor</a></li>
+                <li><a href="/volunteer-applications.html">Minhas Candidaturas</a></li>
+                <li><a href="/volunteer-points.html">Meus Pontos</a></li>
+                <li><a href="/volunteer-points-history.html">Historico Pontos</a></li>
+                <li><a href="/benefits-catalog.html">Catalogo Beneficios</a></li>
+                <li><a href="/redeem-points.html">Resgatar Pontos</a></li>
+                <li><a href="/partner-benefits.html" class="active">Adicionar Beneficios</a></li>
+                <li><a href="/conclude-opportunity.html">Concluir Oportunidade</a></li>
+                <li><a href="/volunteer-ranking.html">Ranking</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Gestao de Beneficios do Parceiro</h2>
+
+        <div id="messageContainer"></div>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalPartnerBenefits">0</div>
+                <div class="stat-label">Beneficios Parceiro Ativos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalProviders">0</div>
+                <div class="stat-label">Fornecedores</div>
+            </div>
+        </div>
+
+        <div class="partner-section">
+            <div class="form-panel">
+                <h3 id="formTitle">Adicionar Novo Beneficio</h3>
+                <form id="benefitForm">
+                    <input type="hidden" id="editBenefitId" value="">
+
+                    <div class="form-group">
+                        <label for="benefitName">Nome do Beneficio *</label>
+                        <input type="text" id="benefitName" placeholder="Ex: Desconto 15% Restaurante" required>
+                        <div class="field-error" id="nameError">Nome e obrigatorio</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="benefitDescription">Descricao *</label>
+                        <textarea id="benefitDescription" placeholder="Descreva o beneficio oferecido aos voluntarios..." required></textarea>
+                        <div class="field-error" id="descriptionError">Descricao e obrigatoria</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="benefitPoints">Pontos Necessarios *</label>
+                        <input type="number" id="benefitPoints" min="1" placeholder="Ex: 150" required>
+                        <div class="field-error" id="pointsError">Pontos devem ser no minimo 1</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="benefitProvider">Fornecedor / Parceiro *</label>
+                        <input type="text" id="benefitProvider" placeholder="Ex: Restaurante Sabor" required>
+                        <div class="field-error" id="providerError">Fornecedor e obrigatorio</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="benefitImageUrl">URL da Imagem (opcional)</label>
+                        <input type="url" id="benefitImageUrl" placeholder="https://exemplo.com/imagem.jpg">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-partner" id="submitBtn">Adicionar Beneficio</button>
+                        <button type="button" class="btn-cancel" id="cancelBtn" style="display:none;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="benefits-list-panel">
+                <h3>Beneficios do Parceiro</h3>
+                <div id="loadingIndicator" class="loading" style="display: none;">Carregando beneficios...</div>
+                <div id="benefitsListContainer">
+                    <div class="empty-list">
+                        <h4>Nenhum beneficio encontrado</h4>
+                        <p>Adicione o primeiro beneficio usando o formulario ao lado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/partner-benefits.js"></script>
+</body>
+</html>
