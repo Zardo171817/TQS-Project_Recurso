@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.PartnerRedemptionStatsResponse;
 import com.example.demo.dto.RedeemPointsRequest;
 import com.example.demo.dto.RedemptionResponse;
 import com.example.demo.service.RedemptionService;
@@ -54,5 +55,17 @@ public class RedemptionController {
     public ResponseEntity<Long> getRedemptionCount(@PathVariable Long volunteerId) {
         Long count = redemptionService.getRedemptionCount(volunteerId);
         return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/partner/{provider}")
+    public ResponseEntity<List<RedemptionResponse>> getRedemptionsByProvider(@PathVariable String provider) {
+        List<RedemptionResponse> redemptions = redemptionService.getRedemptionsByProvider(provider);
+        return ResponseEntity.ok(redemptions);
+    }
+
+    @GetMapping("/partner/{provider}/stats")
+    public ResponseEntity<PartnerRedemptionStatsResponse> getPartnerRedemptionStats(@PathVariable String provider) {
+        PartnerRedemptionStatsResponse stats = redemptionService.getPartnerRedemptionStats(provider);
+        return ResponseEntity.ok(stats);
     }
 }

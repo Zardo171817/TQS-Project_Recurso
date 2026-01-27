@@ -187,6 +187,8 @@
 						<exclude>com/example/demo/dto/CreateApplicationRequest.class</exclude>
 						<exclude>com/example/demo/dto/ConfirmParticipationRequest.class</exclude>
 						<exclude>com/example/demo/dto/OpportunityFilterRequest.class</exclude>
+						<exclude>com/example/demo/dto/BenefitRedemptionDetailResponse.class</exclude>
+						<exclude>com/example/demo/dto/PartnerRedemptionStatsResponse.class</exclude>
 						<exclude>com/example/demo/specification/**</exclude>
 						<exclude>com/example/demo/config/**</exclude>
 						<exclude>com/example/demo/repository/**</exclude>
