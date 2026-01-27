@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.ApplicationResponse;
+import com.example.demo.dto.PointsHistoryResponse;
 import com.example.demo.dto.VolunteerPointsResponse;
 import com.example.demo.dto.VolunteerResponse;
+import com.example.demo.entity.Application;
 import com.example.demo.entity.Volunteer;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ApplicationRepository;
@@ -85,6 +87,23 @@ public class VolunteerService {
         }
         return applicationRepository.findByVolunteerIdAndParticipationConfirmed(volunteerId, true).stream()
                 .map(ApplicationResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PointsHistoryResponse> getPointsHistory(Long volunteerId) {
+        if (!volunteerRepository.existsById(volunteerId)) {
+            throw new ResourceNotFoundException("Volunteer not found with id: " + volunteerId);
+        }
+
+        List<Application> confirmedApplications = applicationRepository
+                .findByVolunteerIdAndParticipationConfirmed(volunteerId, true);
+
+        return confirmedApplications.stream()
+                .filter(app -> app.getPointsAwarded() != null && app.getPointsAwarded() > 0)
+                .sorted(Comparator.comparing(Application::getConfirmedAt,
+                        Comparator.nullsLast(Comparator.reverseOrder())))
+                .map(PointsHistoryResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 }

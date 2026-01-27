@@ -15,5 +15,5 @@ public class ConcludeOpportunityRequest {
     @NotNull(message = "Promoter ID is required")
     private Long promoterId;
     
-    private List<Long> applicationIds; // Adicione esta linha
+    private List<Long> applicationIds; 
 }
