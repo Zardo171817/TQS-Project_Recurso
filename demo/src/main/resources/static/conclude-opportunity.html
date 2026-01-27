@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concluir Oportunidade - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .opportunity-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .opportunity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .opportunity-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            flex: 1;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-OPEN {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .status-CONCLUDED {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .participant-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-info h4 {
+            margin: 0 0 0.25rem 0;
+            color: #2c3e50;
+        }
+
+        .participant-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .participant-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .participant-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .points-info {
+            background: #e8f5e9;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        .promoter-select {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .promoter-select h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .promoter-select-row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .promoter-select-row .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .participants-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .participants-section h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .select-all-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: #e3f2fd;
+            border-radius: 5px;
+        }
+
+        .conclude-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .summary-card {
+            background: #e8f5e9;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .summary-card h3 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #c8e6c9;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .confirmed-badge {
+            background: #27ae60;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .no-participants {
+            text-align: center;
+            padding: 2rem;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Inicio</a></li>
+                <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
+                <li><a href="/applications.html">Candidaturas Promotor</a></li>
+                <li><a href="/volunteer-applications.html">Minhas Candidaturas</a></li>
+                <li><a href="/conclude-opportunity.html" class="active">Concluir Oportunidade</a></li>
+                <li><a href="/volunteer-ranking.html">Ranking</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Concluir Oportunidade e Confirmar Participantes</h2>
+
+        <div class="promoter-select">
+            <h3>Selecione o Promotor e a Oportunidade</h3>
+            <div class="promoter-select-row">
+                <div class="filter-group">
+                    <label for="promoterSelect">Promotor:</label>
+                    <select id="promoterSelect" class="form-control">
+                        <option value="">Selecione um promotor</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="opportunitySelect">Oportunidade (Aberta):</label>
+                    <select id="opportunitySelect" class="form-control" disabled>
+                        <option value="">Selecione uma oportunidade</option>
+                    </select>
+                </div>
+                <div class="filter-group filter-buttons">
+                    <button id="loadOpportunity" class="btn btn-primary" disabled>Carregar Dados</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="messageContainer"></div>
+        <div id="loadingIndicator" class="loading" style="display: none;">Carregando...</div>
+
+        <div id="opportunityContainer" style="display: none;">
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <h3 id="opportunityTitle"></h3>
+                    <span id="opportunityStatus" class="status-badge"></span>
+                </div>
+                <p id="opportunityDescription"></p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <span class="points-info" id="opportunityPoints"></span>
+                    <span style="color: #666;"><strong>Vagas:</strong> <span id="opportunityVacancies"></span></span>
+                    <span style="color: #666;"><strong>Categoria:</strong> <span id="opportunityCategory"></span></span>
+                </div>
+
+                <div class="participants-section">
+                    <h4>Voluntarios Aceites - Confirmar Participacao</h4>
+                    <div id="participantsContainer"></div>
+                </div>
+
+                <div class="conclude-actions">
+                    <button id="concludeBtn" class="btn btn-primary" disabled>Concluir Oportunidade e Atribuir Pontos</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="summaryContainer" style="display: none;">
+            <div class="summary-card">
+                <h3>Resumo da Conclusao</h3>
+                <div id="summaryContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/conclude-opportunity.js"></script>
+</body>
+</html>

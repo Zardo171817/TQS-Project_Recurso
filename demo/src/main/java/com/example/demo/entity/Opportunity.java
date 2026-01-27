@@ -39,6 +39,10 @@ public class Opportunity {
     @Column(nullable = false)
     private Integer points;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OpportunityStatus status = OpportunityStatus.OPEN;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "promoter_id", nullable = false)
     private Promoter promoter;
@@ -46,8 +50,13 @@ public class Opportunity {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime concludedAt;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        if (status == null) {
+            status = OpportunityStatus.OPEN;
+        }
     }
 }

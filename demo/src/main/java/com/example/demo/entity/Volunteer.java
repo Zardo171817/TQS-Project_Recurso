@@ -27,4 +27,14 @@ public class Volunteer {
 
     @Column
     private String skills;
+
+    @Column(nullable = false)
+    private Integer totalPoints = 0;
+
+    @PrePersist
+    protected void onCreate() {
+        if (totalPoints == null) {
+            totalPoints = 0;
+        }
+    }
 }

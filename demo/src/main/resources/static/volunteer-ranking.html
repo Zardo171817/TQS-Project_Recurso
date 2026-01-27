@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking de Voluntarios - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .ranking-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .ranking-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .ranking-card:hover {
+            transform: translateX(5px);
+        }
+
+        .ranking-position {
+            font-size: 1.5rem;
+            font-weight: bold;
+            width: 50px;
+            text-align: center;
+        }
+
+        .ranking-position.gold {
+            color: #f1c40f;
+        }
+
+        .ranking-position.silver {
+            color: #95a5a6;
+        }
+
+        .ranking-position.bronze {
+            color: #cd6133;
+        }
+
+        .volunteer-info {
+            flex: 1;
+        }
+
+        .volunteer-info h3 {
+            margin: 0 0 0.25rem 0;
+            color: #2c3e50;
+        }
+
+        .volunteer-info p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .points-badge {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h4 {
+            color: #7f8c8d;
+            margin: 0 0 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <li><a href="/index.html">Inicio</a></li>
+                <li><a href="/opportunities.html">Oportunidades</a></li>
+                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
+                <li><a href="/applications.html">Candidaturas Promotor</a></li>
+                <li><a href="/volunteer-applications.html">Minhas Candidaturas</a></li>
+                <li><a href="/conclude-opportunity.html">Concluir Oportunidade</a></li>
+                <li><a href="/volunteer-ranking.html" class="active">Ranking</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Ranking de Voluntarios</h2>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h4>Total de Voluntarios</h4>
+                <div class="value" id="totalVolunteers">-</div>
+            </div>
+            <div class="stat-card">
+                <h4>Total de Pontos Distribuidos</h4>
+                <div class="value" id="totalPoints">-</div>
+            </div>
+            <div class="stat-card">
+                <h4>Media de Pontos</h4>
+                <div class="value" id="avgPoints">-</div>
+            </div>
+        </div>
+
+        <div id="messageContainer"></div>
+        <div id="loadingIndicator" class="loading" style="display: none;">Carregando ranking...</div>
+
+        <div class="ranking-container" id="rankingContainer"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRanking();
+        });
+
+        async function loadRanking() {
+            const container = document.getElementById('rankingContainer');
+            const loading = document.getElementById('loadingIndicator');
+
+            try {
+                loading.style.display = 'block';
+
+                const response = await fetch('/api/volunteers/ranking');
+                const volunteers = await response.json();
+
+                updateStats(volunteers);
+
+                if (volunteers.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Nenhum voluntario encontrado.</div>';
+                    return;
+                }
+
+                container.innerHTML = volunteers.map((v, index) => {
+                    const position = index + 1;
+                    let positionClass = '';
+                    if (position === 1) positionClass = 'gold';
+                    else if (position === 2) positionClass = 'silver';
+                    else if (position === 3) positionClass = 'bronze';
+
+                    return `
+                        <div class="ranking-card">
+                            <div class="ranking-position ${positionClass}">#${position}</div>
+                            <div class="volunteer-info">
+                                <h3>${v.name}</h3>
+                                <p>${v.email}</p>
+                            </div>
+                            <div class="points-badge">${v.totalPoints} pts</div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                document.getElementById('messageContainer').innerHTML =
+                    `<div class="alert alert-error">Erro ao carregar ranking: ${error.message}</div>`;
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function updateStats(volunteers) {
+            document.getElementById('totalVolunteers').textContent = volunteers.length;
+
+            const totalPoints = volunteers.reduce((sum, v) => sum + v.totalPoints, 0);
+            document.getElementById('totalPoints').textContent = totalPoints;
+
+            const avgPoints = volunteers.length > 0 ? Math.round(totalPoints / volunteers.length) : 0;
+            document.getElementById('avgPoints').textContent = avgPoints;
+        }
+    </script>
+</body>
+</html>

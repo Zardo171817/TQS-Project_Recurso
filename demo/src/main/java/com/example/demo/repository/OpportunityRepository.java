@@ -1,9 +1,11 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Opportunity;
+import com.example.demo.entity.OpportunityStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +29,11 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long>,
 
     @Query("SELECT DISTINCT o.category FROM Opportunity o ORDER BY o.category")
     List<String> findAllCategories();
+
+    List<Opportunity> findByStatus(OpportunityStatus status);
+
+    List<Opportunity> findByPromoterIdAndStatus(Long promoterId, OpportunityStatus status);
+
+    @Query("SELECT COUNT(o) FROM Opportunity o WHERE o.promoter.id = :promoterId AND o.status = :status")
+    long countByPromoterIdAndStatus(@Param("promoterId") Long promoterId, @Param("status") OpportunityStatus status);
 }

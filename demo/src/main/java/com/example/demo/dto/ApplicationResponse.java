@@ -22,6 +22,10 @@ public class ApplicationResponse {
     private ApplicationStatus status;
     private String motivation;
     private LocalDateTime appliedAt;
+    private Boolean participationConfirmed;
+    private Integer pointsAwarded;
+    private LocalDateTime confirmedAt;
+    private Integer opportunityPoints;
 
     public static ApplicationResponse fromEntity(Application application) {
         ApplicationResponse response = new ApplicationResponse();
@@ -34,6 +38,10 @@ public class ApplicationResponse {
         response.setStatus(application.getStatus());
         response.setMotivation(application.getMotivation());
         response.setAppliedAt(application.getAppliedAt());
+        response.setParticipationConfirmed(application.getParticipationConfirmed());
+        response.setPointsAwarded(application.getPointsAwarded());
+        response.setConfirmedAt(application.getConfirmedAt());
+        response.setOpportunityPoints(application.getOpportunity().getPoints());
         return response;
     }
 }
