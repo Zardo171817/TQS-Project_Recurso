@@ -21,13 +21,28 @@ async function loadPromoters() {
 
         const promoters = await response.json();
         const select = document.getElementById('promoterSelect');
+        const user = getUser();
+        const userEmail = user ? user.email : null;
+        let autoSelectPromoter = null;
 
         promoters.forEach(promoter => {
             const option = document.createElement('option');
             option.value = promoter.id;
             option.textContent = promoter.name;
             select.appendChild(option);
+
+            // Auto-select if this is the logged in promoter
+            if (userEmail && promoter.email === userEmail) {
+                option.selected = true;
+                autoSelectPromoter = promoter;
+                localStorage.setItem('promoterId', promoter.id);
+            }
         });
+
+        // Auto-load applications if promoter was auto-selected
+        if (autoSelectPromoter) {
+            loadApplications();
+        }
 
     } catch (error) {
         console.error('Error loading promoters:', error);

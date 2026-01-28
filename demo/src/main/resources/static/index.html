@@ -11,21 +11,7 @@
         <div class="container">
             <h1 class="logo">Voluntariado Marketplace</h1>
             <ul class="nav-links">
-                <li><a href="/index.html" class="active">Inicio</a></li>
-                <li><a href="/opportunities.html">Oportunidades</a></li>
-                <li><a href="/create-opportunity.html">Criar Oportunidade</a></li>
-                <li><a href="/applications.html">Candidaturas Promotor</a></li>
-                <li><a href="/volunteer-applications.html">Minhas Candidaturas</a></li>
-                <li><a href="/volunteer-profile.html">Perfil Voluntario</a></li>
-                <li><a href="/promoter-profile.html">Perfil Promotor</a></li>
-                <li><a href="/volunteer-points.html">Meus Pontos</a></li>
-                <li><a href="/volunteer-points-history.html">Historico Pontos</a></li>
-                <li><a href="/benefits-catalog.html">Catalogo Beneficios</a></li>
-                <li><a href="/redeem-points.html">Resgatar Pontos</a></li>
-                <li><a href="/partner-benefits.html">Adicionar Beneficios</a></li>
-                <li><a href="/partner-redemptions.html">Ver Resgates</a></li>
-                <li><a href="/conclude-opportunity.html">Concluir Oportunidade</a></li>
-                <li><a href="/volunteer-ranking.html">Ranking</a></li>
+                <!-- Navigation links will be built dynamically by auth.js -->
             </ul>
         </div>
     </nav>
@@ -34,9 +20,8 @@
         <section class="hero">
             <h2>Bem-vindo ao Marketplace de Voluntariado</h2>
             <p>Conectando promotores e voluntários para fazer a diferença na comunidade.</p>
-            <div class="hero-buttons">
-                <a href="/opportunities.html" class="btn btn-primary">Ver Oportunidades</a>
-                <a href="/create-opportunity.html" class="btn btn-secondary">Criar Oportunidade</a>
+            <div class="hero-buttons" id="heroButtons">
+                <!-- Buttons will be shown based on user type -->
             </div>
         </section>
 
@@ -61,5 +46,37 @@
             <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroButtons = document.getElementById('heroButtons');
+            const user = getUser();
+            const userType = user ? user.userType : null;
+
+            if (!user) {
+                // Not logged in - show login/register
+                heroButtons.innerHTML = `
+                    <a href="/login.html" class="btn btn-primary">Entrar</a>
+                    <a href="/register.html" class="btn btn-secondary">Registar</a>
+                `;
+            } else if (userType === 'VOLUNTEER') {
+                heroButtons.innerHTML = `
+                    <a href="/opportunities.html" class="btn btn-primary">Ver Oportunidades</a>
+                    <a href="/volunteer-profile.html" class="btn btn-secondary">Meu Perfil</a>
+                `;
+            } else if (userType === 'PROMOTER') {
+                heroButtons.innerHTML = `
+                    <a href="/create-opportunity.html" class="btn btn-primary">Criar Oportunidade</a>
+                    <a href="/applications.html" class="btn btn-secondary">Ver Candidaturas</a>
+                `;
+            } else if (userType === 'PARTNER') {
+                heroButtons.innerHTML = `
+                    <a href="/partner-benefits.html" class="btn btn-primary">Gerir Benefícios</a>
+                    <a href="/partner-redemptions.html" class="btn btn-secondary">Ver Resgates</a>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>

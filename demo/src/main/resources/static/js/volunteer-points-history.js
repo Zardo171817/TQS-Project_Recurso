@@ -6,7 +6,17 @@ let filteredHistory = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    // Auto-load history if user is logged in as volunteer
+    autoLoadHistory();
 });
+
+function autoLoadHistory() {
+    const user = getUser();
+    if (user && user.userType === 'VOLUNTEER' && user.email) {
+        document.getElementById('volunteerEmail').value = user.email;
+        loadPointsHistory();
+    }
+}
 
 function setupEventListeners() {
     document.getElementById('loadHistory').addEventListener('click', loadPointsHistory);

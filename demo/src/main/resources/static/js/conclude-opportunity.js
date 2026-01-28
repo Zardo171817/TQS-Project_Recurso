@@ -37,13 +37,29 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch('/api/promoters');
             const promoters = await response.json();
+            const user = getUser();
+            const userEmail = user ? user.email : null;
+            let autoSelectPromoter = null;
 
             promoters.forEach(promoter => {
                 const option = document.createElement('option');
                 option.value = promoter.id;
                 option.textContent = `${promoter.name} - ${promoter.organization}`;
                 promoterSelect.appendChild(option);
+
+                // Auto-select if this is the logged in promoter
+                if (userEmail && promoter.email === userEmail) {
+                    option.selected = true;
+                    autoSelectPromoter = promoter;
+                    localStorage.setItem('promoterId', promoter.id);
+                }
             });
+
+            // Auto-load opportunities if promoter was auto-selected
+            if (autoSelectPromoter) {
+                loadOpenOpportunities(autoSelectPromoter.id);
+                opportunitySelect.disabled = false;
+            }
         } catch (error) {
             showMessage('Erro ao carregar promotores: ' + error.message, 'error');
         }

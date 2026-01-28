@@ -39,12 +39,21 @@ async function loadPromoters() {
         if (response.ok) {
             const promoters = await response.json();
             const select = document.getElementById('promoterId');
+            const user = getUser();
+            const userEmail = user ? user.email : null;
 
             promoters.forEach(promoter => {
                 const option = document.createElement('option');
                 option.value = promoter.id;
                 option.textContent = promoter.name;
                 select.appendChild(option);
+
+                // Auto-select if this is the logged in promoter
+                if (userEmail && promoter.email === userEmail) {
+                    option.selected = true;
+                    // Store promoterId for later use
+                    localStorage.setItem('promoterId', promoter.id);
+                }
             });
         }
     } catch (error) {
