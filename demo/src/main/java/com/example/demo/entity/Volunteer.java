@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "volunteers")
 @Data
@@ -28,8 +30,23 @@ public class Volunteer {
     @Column
     private String skills;
 
+    @Column(length = 500)
+    private String interests;
+
+    @Column(length = 500)
+    private String availability;
+
+    @Column(length = 1000)
+    private String bio;
+
     @Column(nullable = false)
     private Integer totalPoints = 0;
+
+    @Column
+    private LocalDateTime profileCreatedAt;
+
+    @Column
+    private LocalDateTime profileUpdatedAt;
 
     @PrePersist
     protected void onCreate() {
