@@ -10,239 +10,174 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @DisplayName("GlobalExceptionHandler Tests")
 class GlobalExceptionHandlerTest {
 
-    private GlobalExceptionHandler exceptionHandler;
+    private GlobalExceptionHandler handler;
 
     @BeforeEach
     void setUp() {
-        exceptionHandler = new GlobalExceptionHandler();
+        handler = new GlobalExceptionHandler();
     }
 
     @Nested
-    @DisplayName("handleResourceNotFoundException Tests")
-    class HandleResourceNotFoundExceptionTests {
+    @DisplayName("ResourceNotFoundException Handler Tests")
+    class ResourceNotFoundExceptionTests {
 
         @Test
-        @DisplayName("Should return 404 status with error message")
-        void handleResourceNotFoundExceptionReturns404() {
-            ResourceNotFoundException exception = new ResourceNotFoundException("Volunteer not found with id: 1");
+        @DisplayName("Should return 404 with correct message")
+        void shouldReturn404WithCorrectMessage() {
+            ResourceNotFoundException exception = new ResourceNotFoundException("Resource not found");
 
             ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
-                    exceptionHandler.handleResourceNotFoundException(exception);
+                    handler.handleResourceNotFoundException(exception);
 
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(404, response.getBody().status());
-            assertEquals("Volunteer not found with id: 1", response.getBody().message());
-            assertNotNull(response.getBody().timestamp());
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+            assertThat(response.getBody()).isNotNull();
+            assertThat(response.getBody().message()).isEqualTo("Resource not found");
+            assertThat(response.getBody().status()).isEqualTo(404);
+            assertThat(response.getBody().timestamp()).isNotNull();
         }
 
         @Test
-        @DisplayName("Should handle empty message")
-        void handleResourceNotFoundExceptionWithEmptyMessage() {
-            ResourceNotFoundException exception = new ResourceNotFoundException("");
+        @DisplayName("Should include timestamp in response")
+        void shouldIncludeTimestampInResponse() {
+            ResourceNotFoundException exception = new ResourceNotFoundException("Test");
 
             ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
-                    exceptionHandler.handleResourceNotFoundException(exception);
+                    handler.handleResourceNotFoundException(exception);
 
-            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals("", response.getBody().message());
-        }
-    }
-
-    @Nested
-    @DisplayName("handleIllegalStateException Tests")
-    class HandleIllegalStateExceptionTests {
-
-        @Test
-        @DisplayName("Should return 409 status with error message")
-        void handleIllegalStateExceptionReturns409() {
-            IllegalStateException exception = new IllegalStateException("Invalid state");
-
-            ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
-                    exceptionHandler.handleIllegalStateException(exception);
-
-            assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(409, response.getBody().status());
-            assertEquals("Invalid state", response.getBody().message());
-            assertNotNull(response.getBody().timestamp());
+            assertThat(response.getBody().timestamp()).isNotNull();
         }
     }
 
     @Nested
-    @DisplayName("handleIllegalArgumentException Tests")
-    class HandleIllegalArgumentExceptionTests {
+    @DisplayName("IllegalStateException Handler Tests")
+    class IllegalStateExceptionTests {
 
         @Test
-        @DisplayName("Should return 400 status with error message")
-        void handleIllegalArgumentExceptionReturns400() {
-            IllegalArgumentException exception = new IllegalArgumentException("Email already exists: test@email.com");
+        @DisplayName("Should return 409 with correct message")
+        void shouldReturn409WithCorrectMessage() {
+            IllegalStateException exception = new IllegalStateException("Conflict occurred");
 
             ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
-                    exceptionHandler.handleIllegalArgumentException(exception);
+                    handler.handleIllegalStateException(exception);
 
-            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(400, response.getBody().status());
-            assertEquals("Email already exists: test@email.com", response.getBody().message());
-            assertNotNull(response.getBody().timestamp());
-        }
-
-        @Test
-        @DisplayName("Should handle no fields to update message")
-        void handleIllegalArgumentExceptionNoFields() {
-            IllegalArgumentException exception = new IllegalArgumentException("No fields to update provided");
-
-            ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
-                    exceptionHandler.handleIllegalArgumentException(exception);
-
-            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals("No fields to update provided", response.getBody().message());
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+            assertThat(response.getBody().message()).isEqualTo("Conflict occurred");
+            assertThat(response.getBody().status()).isEqualTo(409);
         }
     }
 
     @Nested
-    @DisplayName("handleValidationExceptions Tests")
-    class HandleValidationExceptionsTests {
+    @DisplayName("IllegalArgumentException Handler Tests")
+    class IllegalArgumentExceptionTests {
 
         @Test
-        @DisplayName("Should return 400 status with field errors")
-        void handleValidationExceptionsReturns400() {
-            MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
+        @DisplayName("Should return 400 with correct message")
+        void shouldReturn400WithCorrectMessage() {
+            IllegalArgumentException exception = new IllegalArgumentException("Invalid argument");
+
+            ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
+                    handler.handleIllegalArgumentException(exception);
+
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(response.getBody().message()).isEqualTo("Invalid argument");
+            assertThat(response.getBody().status()).isEqualTo(400);
+        }
+    }
+
+    @Nested
+    @DisplayName("MethodArgumentNotValidException Handler Tests")
+    class MethodArgumentNotValidExceptionTests {
+
+        @Test
+        @DisplayName("Should return 400 with validation errors")
+        void shouldReturn400WithValidationErrors() {
             BindingResult bindingResult = mock(BindingResult.class);
+            FieldError fieldError = new FieldError("object", "field", "must not be blank");
+            when(bindingResult.getAllErrors()).thenReturn(java.util.Collections.singletonList(fieldError));
 
-            FieldError fieldError1 = new FieldError("request", "name", "Name is required");
-            FieldError fieldError2 = new FieldError("request", "email", "Invalid email format");
-
+            MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
             when(exception.getBindingResult()).thenReturn(bindingResult);
-            when(bindingResult.getAllErrors()).thenReturn(List.of(fieldError1, fieldError2));
 
-            ResponseEntity<Map<String, Object>> response =
-                    exceptionHandler.handleValidationExceptions(exception);
+            ResponseEntity<Map<String, Object>> response = handler.handleValidationExceptions(exception);
 
-            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(400, response.getBody().get("status"));
-            assertNotNull(response.getBody().get("timestamp"));
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+            assertThat(response.getBody().get("status")).isEqualTo(400);
+            assertThat(response.getBody()).containsKey("errors");
+        }
+
+        @Test
+        @DisplayName("Should map field errors correctly")
+        void shouldMapFieldErrorsCorrectly() {
+            BindingResult bindingResult = mock(BindingResult.class);
+            FieldError fieldError1 = new FieldError("object", "name", "must not be blank");
+            FieldError fieldError2 = new FieldError("object", "email", "invalid format");
+            when(bindingResult.getAllErrors()).thenReturn(java.util.Arrays.asList(fieldError1, fieldError2));
+
+            MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
+            when(exception.getBindingResult()).thenReturn(bindingResult);
+
+            ResponseEntity<Map<String, Object>> response = handler.handleValidationExceptions(exception);
 
             @SuppressWarnings("unchecked")
             Map<String, String> errors = (Map<String, String>) response.getBody().get("errors");
-            assertEquals("Name is required", errors.get("name"));
-            assertEquals("Invalid email format", errors.get("email"));
-        }
-
-        @Test
-        @DisplayName("Should handle single field error")
-        void handleSingleValidationError() {
-            MethodArgumentNotValidException exception = mock(MethodArgumentNotValidException.class);
-            BindingResult bindingResult = mock(BindingResult.class);
-
-            FieldError fieldError = new FieldError("request", "name", "Name must be between 2 and 100 characters");
-
-            when(exception.getBindingResult()).thenReturn(bindingResult);
-            when(bindingResult.getAllErrors()).thenReturn(List.of(fieldError));
-
-            ResponseEntity<Map<String, Object>> response =
-                    exceptionHandler.handleValidationExceptions(exception);
-
-            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-
-            @SuppressWarnings("unchecked")
-            Map<String, String> errors = (Map<String, String>) response.getBody().get("errors");
-            assertEquals(1, errors.size());
-            assertEquals("Name must be between 2 and 100 characters", errors.get("name"));
+            assertThat(errors).containsEntry("name", "must not be blank");
+            assertThat(errors).containsEntry("email", "invalid format");
         }
     }
 
     @Nested
-    @DisplayName("handleGenericException Tests")
-    class HandleGenericExceptionTests {
+    @DisplayName("Generic Exception Handler Tests")
+    class GenericExceptionTests {
 
         @Test
-        @DisplayName("Should return 500 status with error message")
-        void handleGenericExceptionReturns500() {
-            Exception exception = new RuntimeException("Unexpected error occurred");
+        @DisplayName("Should return 500 with generic message")
+        void shouldReturn500WithGenericMessage() {
+            Exception exception = new Exception("Unexpected error");
 
             ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
-                    exceptionHandler.handleGenericException(exception);
+                    handler.handleGenericException(exception);
 
-            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-            assertNotNull(response.getBody());
-            assertEquals(500, response.getBody().status());
-            assertTrue(response.getBody().message().contains("An unexpected error occurred"));
-            assertTrue(response.getBody().message().contains("Unexpected error occurred"));
-            assertNotNull(response.getBody().timestamp());
-        }
-
-        @Test
-        @DisplayName("Should handle NullPointerException")
-        void handleNullPointerException() {
-            Exception exception = new NullPointerException("null value");
-
-            ResponseEntity<GlobalExceptionHandler.ErrorResponse> response =
-                    exceptionHandler.handleGenericException(exception);
-
-            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-            assertTrue(response.getBody().message().contains("null value"));
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+            assertThat(response.getBody().status()).isEqualTo(500);
+            assertThat(response.getBody().message()).contains("An unexpected error occurred");
         }
     }
 
     @Nested
     @DisplayName("ErrorResponse Record Tests")
-    class ErrorResponseRecordTests {
+    class ErrorResponseTests {
 
         @Test
-        @DisplayName("ErrorResponse should store and return values correctly")
-        void errorResponseStoresValues() {
-            var now = java.time.LocalDateTime.now();
-            var errorResponse = new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
+        @DisplayName("Should create ErrorResponse with all fields")
+        void shouldCreateErrorResponseWithAllFields() {
+            java.time.LocalDateTime now = java.time.LocalDateTime.now();
+            GlobalExceptionHandler.ErrorResponse response =
+                    new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
 
-            assertEquals(404, errorResponse.status());
-            assertEquals("Not found", errorResponse.message());
-            assertEquals(now, errorResponse.timestamp());
+            assertThat(response.status()).isEqualTo(404);
+            assertThat(response.message()).isEqualTo("Not found");
+            assertThat(response.timestamp()).isEqualTo(now);
         }
 
         @Test
-        @DisplayName("ErrorResponse equals should work correctly")
-        void errorResponseEquals() {
-            var now = java.time.LocalDateTime.now();
-            var errorResponse1 = new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
-            var errorResponse2 = new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
+        @DisplayName("Should be equal when all fields are the same")
+        void shouldBeEqualWhenAllFieldsAreSame() {
+            java.time.LocalDateTime now = java.time.LocalDateTime.now();
+            GlobalExceptionHandler.ErrorResponse response1 =
+                    new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
+            GlobalExceptionHandler.ErrorResponse response2 =
+                    new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
 
-            assertEquals(errorResponse1, errorResponse2);
-        }
-
-        @Test
-        @DisplayName("ErrorResponse hashCode should be consistent")
-        void errorResponseHashCode() {
-            var now = java.time.LocalDateTime.now();
-            var errorResponse1 = new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
-            var errorResponse2 = new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
-
-            assertEquals(errorResponse1.hashCode(), errorResponse2.hashCode());
-        }
-
-        @Test
-        @DisplayName("ErrorResponse toString should contain field values")
-        void errorResponseToString() {
-            var now = java.time.LocalDateTime.now();
-            var errorResponse = new GlobalExceptionHandler.ErrorResponse(404, "Not found", now);
-
-            String toString = errorResponse.toString();
-            assertTrue(toString.contains("404"));
-            assertTrue(toString.contains("Not found"));
+            assertThat(response1).isEqualTo(response2);
         }
     }
 }

@@ -1,63 +1,73 @@
 package com.example.demo.exception;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ResourceNotFoundException Tests")
 class ResourceNotFoundExceptionTest {
 
-    @Test
-    @DisplayName("Should create exception with message")
-    void shouldCreateExceptionWithMessage() {
-        String message = "Volunteer not found with id: 1";
-        ResourceNotFoundException exception = new ResourceNotFoundException(message);
+    @Nested
+    @DisplayName("Constructor Tests")
+    class ConstructorTests {
 
-        assertEquals(message, exception.getMessage());
+        @Test
+        @DisplayName("Should create exception with message")
+        void shouldCreateExceptionWithMessage() {
+            ResourceNotFoundException exception = new ResourceNotFoundException("Resource not found");
+
+            assertThat(exception.getMessage()).isEqualTo("Resource not found");
+        }
+
+        @Test
+        @DisplayName("Should be throwable")
+        void shouldBeThrowable() {
+            assertThatThrownBy(() -> {
+                throw new ResourceNotFoundException("Test exception");
+            })
+                    .isInstanceOf(ResourceNotFoundException.class)
+                    .hasMessage("Test exception");
+        }
+
+        @Test
+        @DisplayName("Should extend RuntimeException")
+        void shouldExtendRuntimeException() {
+            ResourceNotFoundException exception = new ResourceNotFoundException("Test");
+
+            assertThat(exception).isInstanceOf(RuntimeException.class);
+        }
     }
 
-    @Test
-    @DisplayName("Should be instance of RuntimeException")
-    void shouldBeRuntimeException() {
-        ResourceNotFoundException exception = new ResourceNotFoundException("Test message");
+    @Nested
+    @DisplayName("Message Tests")
+    class MessageTests {
 
-        assertInstanceOf(RuntimeException.class, exception);
-    }
+        @Test
+        @DisplayName("Should handle null message")
+        void shouldHandleNullMessage() {
+            ResourceNotFoundException exception = new ResourceNotFoundException(null);
 
-    @Test
-    @DisplayName("Should handle empty message")
-    void shouldHandleEmptyMessage() {
-        ResourceNotFoundException exception = new ResourceNotFoundException("");
+            assertThat(exception.getMessage()).isNull();
+        }
 
-        assertEquals("", exception.getMessage());
-    }
+        @Test
+        @DisplayName("Should handle empty message")
+        void shouldHandleEmptyMessage() {
+            ResourceNotFoundException exception = new ResourceNotFoundException("");
 
-    @Test
-    @DisplayName("Should handle null message")
-    void shouldHandleNullMessage() {
-        ResourceNotFoundException exception = new ResourceNotFoundException(null);
+            assertThat(exception.getMessage()).isEmpty();
+        }
 
-        assertNull(exception.getMessage());
-    }
+        @Test
+        @DisplayName("Should handle long message")
+        void shouldHandleLongMessage() {
+            String longMessage = "A".repeat(1000);
+            ResourceNotFoundException exception = new ResourceNotFoundException(longMessage);
 
-    @Test
-    @DisplayName("Should be throwable")
-    void shouldBeThrowable() {
-        assertThrows(ResourceNotFoundException.class, () -> {
-            throw new ResourceNotFoundException("Test exception");
-        });
-    }
-
-    @Test
-    @DisplayName("Should preserve message when caught")
-    void shouldPreserveMessageWhenCaught() {
-        String expectedMessage = "Profile not found with email: test@email.com";
-
-        try {
-            throw new ResourceNotFoundException(expectedMessage);
-        } catch (ResourceNotFoundException e) {
-            assertEquals(expectedMessage, e.getMessage());
+            assertThat(exception.getMessage()).hasSize(1000);
         }
     }
 }
