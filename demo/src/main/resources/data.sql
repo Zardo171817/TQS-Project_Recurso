@@ -13,3 +13,15 @@ INSERT INTO benefits (name, description, points_required, category, provider, im
 INSERT INTO benefits (name, description, points_required, category, provider, image_url, active, created_at) VALUES ('Desconto Cinema NOS', '20% de desconto em bilhetes de cinema', 150, 'PARTNER', 'Cinema NOS', NULL, true, CURRENT_TIMESTAMP);
 INSERT INTO benefits (name, description, points_required, category, provider, image_url, active, created_at) VALUES ('Voucher Restaurante', 'Voucher de 10 euros no Restaurante Sabor', 300, 'PARTNER', 'Restaurante Sabor', NULL, true, CURRENT_TIMESTAMP);
 INSERT INTO benefits (name, description, points_required, category, provider, image_url, active, created_at) VALUES ('Desconto Estacionamento', '50% de desconto no estacionamento mensal', 250, 'PARTNER', 'ParkAveiro', NULL, true, CURRENT_TIMESTAMP);
+
+-- Insert sample volunteers
+INSERT INTO volunteers (name, email, phone, skills, total_points) VALUES ('Maria Silva', 'maria@email.com', '912345678', 'Comunicacao, Lideranca', 500);
+INSERT INTO volunteers (name, email, phone, skills, total_points) VALUES ('Joao Santos', 'joao@email.com', '913456789', 'Programacao, Design', 350);
+INSERT INTO volunteers (name, email, phone, skills, total_points) VALUES ('Ana Costa', 'ana@email.com', '914567890', 'Saude, Educacao', 200);
+
+-- Insert sample redemptions
+INSERT INTO redemptions (volunteer_id, benefit_id, points_spent, status, redeemed_at) VALUES (1, 3, 150, 'COMPLETED', CURRENT_TIMESTAMP);
+INSERT INTO redemptions (volunteer_id, benefit_id, points_spent, status, redeemed_at) VALUES (2, 3, 150, 'COMPLETED', CURRENT_TIMESTAMP);
+INSERT INTO redemptions (volunteer_id, benefit_id, points_spent, status, redeemed_at) VALUES (1, 4, 300, 'COMPLETED', CURRENT_TIMESTAMP);
+INSERT INTO redemptions (volunteer_id, benefit_id, points_spent, status, redeemed_at) VALUES (3, 5, 250, 'COMPLETED', CURRENT_TIMESTAMP);
+INSERT INTO redemptions (volunteer_id, benefit_id, points_spent, status, redeemed_at) VALUES (2, 5, 250, 'COMPLETED', CURRENT_TIMESTAMP);
