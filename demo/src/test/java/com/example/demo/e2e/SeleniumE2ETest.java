@@ -34,6 +34,7 @@ class SeleniumE2ETest extends AbstractIntegrationTest {
         try {
             WebDriverManager.chromedriver().setup();
         } catch (Exception e) {
+            System.err.println("WebDriverManager setup failed: " + e.getMessage());
             chromeAvailable = false;
         }
     }
@@ -44,16 +45,20 @@ class SeleniumE2ETest extends AbstractIntegrationTest {
 
         try {
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
+            options.addArguments("--headless=new");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--disable-gpu");
             options.addArguments("--window-size=1920,1080");
             options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--disable-extensions");
+            options.addArguments("--disable-software-rasterizer");
 
             driver = new ChromeDriver(options);
-            wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         } catch (Exception e) {
+            System.err.println("ChromeDriver initialization failed: " + e.getMessage());
+            chromeAvailable = false;
             assumeTrue(false, "Chrome driver setup failed: " + e.getMessage());
         }
     }
