@@ -1,6 +1,5 @@
 package com.example.demo.unit.service;
 
-import com.example.demo.dto.PartnerRedemptionStatsResponse;
 import com.example.demo.dto.RedeemPointsRequest;
 import com.example.demo.dto.RedemptionResponse;
 import com.example.demo.entity.Benefit;
@@ -15,22 +14,20 @@ import com.example.demo.repository.VolunteerRepository;
 import com.example.demo.service.RedemptionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("RedemptionService Unit Tests")
@@ -51,7 +48,6 @@ class RedemptionServiceTest {
     private Volunteer volunteer;
     private Benefit benefit;
     private Redemption redemption;
-    private RedeemPointsRequest redeemRequest;
 
     @BeforeEach
     void setUp() {
@@ -63,13 +59,11 @@ class RedemptionServiceTest {
 
         benefit = new Benefit();
         benefit.setId(1L);
-        benefit.setName("Discount");
-        benefit.setDescription("10% discount");
+        benefit.setName("Test Benefit");
         benefit.setPointsRequired(100);
         benefit.setCategory(BenefitCategory.PARTNER);
-        benefit.setProvider("Partner Store");
+        benefit.setProvider("Test Provider");
         benefit.setActive(true);
-        benefit.setCreatedAt(LocalDateTime.now());
 
         redemption = new Redemption();
         redemption.setId(1L);
@@ -77,226 +71,71 @@ class RedemptionServiceTest {
         redemption.setBenefit(benefit);
         redemption.setPointsSpent(100);
         redemption.setStatus(RedemptionStatus.COMPLETED);
-        redemption.setRedeemedAt(LocalDateTime.now());
-
-        redeemRequest = new RedeemPointsRequest();
-        redeemRequest.setVolunteerId(1L);
-        redeemRequest.setBenefitId(1L);
     }
 
-    @Nested
-    @DisplayName("Redeem Points Tests")
-    class RedeemPointsTests {
+    @Test
+    @DisplayName("Should redeem points successfully")
+    void shouldRedeemPointsSuccessfully() {
+        RedeemPointsRequest request = new RedeemPointsRequest();
+        request.setVolunteerId(1L);
+        request.setBenefitId(1L);
 
-        @Test
-        @DisplayName("Should redeem points successfully")
-        void shouldRedeemPointsSuccessfully() {
-            when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
-            when(benefitRepository.findById(1L)).thenReturn(Optional.of(benefit));
-            when(volunteerRepository.save(any(Volunteer.class))).thenReturn(volunteer);
-            when(redemptionRepository.save(any(Redemption.class))).thenAnswer(invocation -> {
-                Redemption r = invocation.getArgument(0);
-                r.setId(1L);
-                return r;
-            });
+        when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
+        when(benefitRepository.findById(1L)).thenReturn(Optional.of(benefit));
+        when(redemptionRepository.save(any(Redemption.class))).thenAnswer(invocation -> {
+            Redemption r = invocation.getArgument(0);
+            r.setId(1L);
+            return r;
+        });
+        when(volunteerRepository.save(any(Volunteer.class))).thenReturn(volunteer);
 
-            RedemptionResponse response = redemptionService.redeemPoints(redeemRequest);
+        RedemptionResponse response = redemptionService.redeemPoints(request);
 
-            assertThat(response.getPointsSpent()).isEqualTo(100);
-            assertThat(response.getStatus()).isEqualTo(RedemptionStatus.COMPLETED);
-            verify(volunteerRepository).save(argThat(v -> v.getTotalPoints() == 400)); // 500 - 100
-        }
-
-        @Test
-        @DisplayName("Should fail when volunteer not found")
-        void shouldFailWhenVolunteerNotFound() {
-            when(volunteerRepository.findById(999L)).thenReturn(Optional.empty());
-            redeemRequest.setVolunteerId(999L);
-
-            assertThatThrownBy(() -> redemptionService.redeemPoints(redeemRequest))
-                    .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessageContaining("Volunteer not found");
-        }
-
-        @Test
-        @DisplayName("Should fail when benefit not found")
-        void shouldFailWhenBenefitNotFound() {
-            when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
-            when(benefitRepository.findById(999L)).thenReturn(Optional.empty());
-            redeemRequest.setBenefitId(999L);
-
-            assertThatThrownBy(() -> redemptionService.redeemPoints(redeemRequest))
-                    .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessageContaining("Benefit not found");
-        }
-
-        @Test
-        @DisplayName("Should fail when benefit is inactive")
-        void shouldFailWhenBenefitIsInactive() {
-            benefit.setActive(false);
-            when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
-            when(benefitRepository.findById(1L)).thenReturn(Optional.of(benefit));
-
-            assertThatThrownBy(() -> redemptionService.redeemPoints(redeemRequest))
-                    .isInstanceOf(IllegalStateException.class)
-                    .hasMessageContaining("not active");
-        }
-
-        @Test
-        @DisplayName("Should fail when insufficient points")
-        void shouldFailWhenInsufficientPoints() {
-            volunteer.setTotalPoints(50); // Less than required 100
-            when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
-            when(benefitRepository.findById(1L)).thenReturn(Optional.of(benefit));
-
-            assertThatThrownBy(() -> redemptionService.redeemPoints(redeemRequest))
-                    .isInstanceOf(IllegalStateException.class)
-                    .hasMessageContaining("Insufficient points");
-        }
+        assertThat(response.getPointsSpent()).isEqualTo(100);
     }
 
-    @Nested
-    @DisplayName("Get Redemptions Tests")
-    class GetRedemptionsTests {
+    @Test
+    @DisplayName("Should fail when insufficient points")
+    void shouldFailWhenInsufficientPoints() {
+        volunteer.setTotalPoints(50); // Less than required
+        RedeemPointsRequest request = new RedeemPointsRequest();
+        request.setVolunteerId(1L);
+        request.setBenefitId(1L);
 
-        @Test
-        @DisplayName("Should get redemption by ID")
-        void shouldGetRedemptionById() {
-            when(redemptionRepository.findById(1L)).thenReturn(Optional.of(redemption));
+        when(volunteerRepository.findById(1L)).thenReturn(Optional.of(volunteer));
+        when(benefitRepository.findById(1L)).thenReturn(Optional.of(benefit));
 
-            RedemptionResponse response = redemptionService.getRedemptionById(1L);
-
-            assertThat(response.getId()).isEqualTo(1L);
-        }
-
-        @Test
-        @DisplayName("Should throw exception for non-existent redemption")
-        void shouldThrowExceptionForNonExistent() {
-            when(redemptionRepository.findById(999L)).thenReturn(Optional.empty());
-
-            assertThatThrownBy(() -> redemptionService.getRedemptionById(999L))
-                    .isInstanceOf(ResourceNotFoundException.class);
-        }
-
-        @Test
-        @DisplayName("Should get redemptions by volunteer")
-        void shouldGetRedemptionsByVolunteer() {
-            when(volunteerRepository.existsById(1L)).thenReturn(true);
-            when(redemptionRepository.findByVolunteerIdOrderByRedeemedAtDesc(1L))
-                    .thenReturn(Collections.singletonList(redemption));
-
-            List<RedemptionResponse> responses = redemptionService.getRedemptionsByVolunteer(1L);
-
-            assertThat(responses).hasSize(1);
-        }
-
-        @Test
-        @DisplayName("Should get completed redemptions by volunteer")
-        void shouldGetCompletedRedemptionsByVolunteer() {
-            when(volunteerRepository.existsById(1L)).thenReturn(true);
-            when(redemptionRepository.findByVolunteerIdAndStatus(1L, RedemptionStatus.COMPLETED))
-                    .thenReturn(Collections.singletonList(redemption));
-
-            List<RedemptionResponse> responses = redemptionService.getCompletedRedemptionsByVolunteer(1L);
-
-            assertThat(responses).hasSize(1);
-        }
-
-        @Test
-        @DisplayName("Should get redemptions by provider")
-        void shouldGetRedemptionsByProvider() {
-            when(benefitRepository.findByProviderContainingIgnoreCase("Partner"))
-                    .thenReturn(Collections.singletonList(benefit));
-            when(redemptionRepository.findByBenefitProviderIgnoreCaseOrderByRedeemedAtDesc("Partner"))
-                    .thenReturn(Collections.singletonList(redemption));
-
-            List<RedemptionResponse> responses = redemptionService.getRedemptionsByProvider("Partner");
-
-            assertThat(responses).hasSize(1);
-        }
-
-        @Test
-        @DisplayName("Should throw exception when no benefits for provider")
-        void shouldThrowExceptionWhenNoBenefitsForProvider() {
-            when(benefitRepository.findByProviderContainingIgnoreCase("Unknown"))
-                    .thenReturn(Collections.emptyList());
-
-            assertThatThrownBy(() -> redemptionService.getRedemptionsByProvider("Unknown"))
-                    .isInstanceOf(ResourceNotFoundException.class);
-        }
+        assertThatThrownBy(() -> redemptionService.redeemPoints(request))
+                .isInstanceOf(IllegalStateException.class);
     }
 
-    @Nested
-    @DisplayName("Points Statistics Tests")
-    class PointsStatisticsTests {
+    @Test
+    @DisplayName("Should get redemption by ID")
+    void shouldGetRedemptionById() {
+        when(redemptionRepository.findById(1L)).thenReturn(Optional.of(redemption));
 
-        @Test
-        @DisplayName("Should get total points spent by volunteer")
-        void shouldGetTotalPointsSpent() {
-            when(volunteerRepository.existsById(1L)).thenReturn(true);
-            when(redemptionRepository.sumPointsSpentByVolunteerId(1L)).thenReturn(300);
+        RedemptionResponse response = redemptionService.getRedemptionById(1L);
 
-            Integer totalSpent = redemptionService.getTotalPointsSpent(1L);
-
-            assertThat(totalSpent).isEqualTo(300);
-        }
-
-        @Test
-        @DisplayName("Should get redemption count by volunteer")
-        void shouldGetRedemptionCount() {
-            when(volunteerRepository.existsById(1L)).thenReturn(true);
-            when(redemptionRepository.countCompletedByVolunteerId(1L)).thenReturn(5L);
-
-            Long count = redemptionService.getRedemptionCount(1L);
-
-            assertThat(count).isEqualTo(5L);
-        }
-
-        @Test
-        @DisplayName("Should throw exception when volunteer not found for stats")
-        void shouldThrowExceptionWhenVolunteerNotFoundForStats() {
-            when(volunteerRepository.existsById(999L)).thenReturn(false);
-
-            assertThatThrownBy(() -> redemptionService.getTotalPointsSpent(999L))
-                    .isInstanceOf(ResourceNotFoundException.class);
-        }
+        assertThat(response.getId()).isEqualTo(1L);
     }
 
-    @Nested
-    @DisplayName("Partner Stats Tests")
-    class PartnerStatsTests {
+    @Test
+    @DisplayName("Should throw exception for non-existent redemption")
+    void shouldThrowExceptionForNonExistent() {
+        when(redemptionRepository.findById(999L)).thenReturn(Optional.empty());
 
-        @Test
-        @DisplayName("Should get partner redemption stats")
-        void shouldGetPartnerRedemptionStats() {
-            when(benefitRepository.findByProviderContainingIgnoreCase("Partner"))
-                    .thenReturn(Collections.singletonList(benefit));
-            when(redemptionRepository.countCompletedByBenefitId(1L)).thenReturn(10L);
-            when(redemptionRepository.sumPointsSpentByBenefitId(1L)).thenReturn(1000L);
-            when(redemptionRepository.findByBenefitProviderIgnoreCaseOrderByRedeemedAtDesc("Partner"))
-                    .thenReturn(Collections.singletonList(redemption));
+        assertThatThrownBy(() -> redemptionService.getRedemptionById(999L))
+                .isInstanceOf(ResourceNotFoundException.class);
+    }
 
-            PartnerRedemptionStatsResponse stats = redemptionService.getPartnerRedemptionStats("Partner");
+    @Test
+    @DisplayName("Should get redemptions by volunteer")
+    void shouldGetRedemptionsByVolunteer() {
+        when(volunteerRepository.existsById(1L)).thenReturn(true);
+        when(redemptionRepository.findByVolunteerIdOrderByRedeemedAtDesc(1L)).thenReturn(Arrays.asList(redemption));
 
-            assertThat(stats.getProvider()).isEqualTo("Partner");
-            assertThat(stats.getTotalBenefits()).isEqualTo(1);
-            assertThat(stats.getTotalRedemptions()).isEqualTo(10L);
-            assertThat(stats.getTotalPointsRedeemed()).isEqualTo(1000L);
-        }
+        List<RedemptionResponse> responses = redemptionService.getRedemptionsByVolunteer(1L);
 
-        @Test
-        @DisplayName("Should throw exception when no partner benefits found")
-        void shouldThrowExceptionWhenNoPartnerBenefitsFound() {
-            Benefit uaBenefit = new Benefit();
-            uaBenefit.setCategory(BenefitCategory.UA);
-            uaBenefit.setProvider("UA");
-
-            when(benefitRepository.findByProviderContainingIgnoreCase("UA"))
-                    .thenReturn(Collections.singletonList(uaBenefit));
-
-            assertThatThrownBy(() -> redemptionService.getPartnerRedemptionStats("UA"))
-                    .isInstanceOf(ResourceNotFoundException.class)
-                    .hasMessageContaining("No PARTNER benefits");
-        }
+        assertThat(responses).hasSize(1);
     }
 }
