@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registar - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <!-- Navigation links will be built dynamically by auth.js -->
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="form-container">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Criar Conta</h2>
+
+            <div id="message" class="message" style="display: none;"></div>
+
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" name="name" required placeholder="O seu nome" minlength="2" maxlength="100">
+                    <span class="error-message" id="nameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Mínimo 6 caracteres" minlength="6">
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirme a password">
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="userType">Tipo de Perfil</label>
+                    <select id="userType" name="userType" required>
+                        <option value="">Selecione o tipo de perfil</option>
+                        <option value="VOLUNTEER">Voluntário</option>
+                        <option value="PROMOTER">Promotor</option>
+                        <option value="PARTNER">Parceiro</option>
+                    </select>
+                    <span class="error-message" id="userTypeError"></span>
+                </div>
+
+                <div class="user-type-info" style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 1rem;">
+                    <p id="typeDescription" style="font-size: 0.9rem; color: #7f8c8d; margin: 0;">
+                        Selecione um tipo de perfil para ver a descrição.
+                    </p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Criar Conta
+                </button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1.5rem; color: #7f8c8d;">
+                Já tem conta? <a href="/login.html" style="color: #3498db;">Fazer Login</a>
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // Redirect if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (isLoggedIn()) {
+                window.location.href = '/index.html';
+                return;
+            }
+        });
+
+        const typeDescriptions = {
+            VOLUNTEER: 'Como voluntário, poderá candidatar-se a oportunidades de voluntariado, ganhar pontos e resgatar benefícios.',
+            PROMOTER: 'Como promotor, poderá criar e gerir oportunidades de voluntariado para a sua organização.',
+            PARTNER: 'Como parceiro, poderá adicionar benefícios ao catálogo que os voluntários podem resgatar com pontos.'
+        };
+
+        document.getElementById('userType').addEventListener('change', function() {
+            const description = typeDescriptions[this.value] || 'Selecione um tipo de perfil para ver a descrição.';
+            document.getElementById('typeDescription').textContent = description;
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const userType = document.getElementById('userType').value;
+            const messageDiv = document.getElementById('message');
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'As passwords não coincidem.';
+                messageDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password, userType })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = data.message + ' A redirecionar para o login...';
+                    messageDiv.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = '/login.html';
+                    }, 2000);
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Erro ao criar conta. Tente novamente.';
+                messageDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

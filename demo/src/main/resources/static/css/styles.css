@@ -53,6 +53,36 @@ body {
     color: #3498db;
 }
 
+/* User Badge in Navbar */
+.user-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background-color: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-logout {
+    background-color: transparent;
+    color: #e74c3c !important;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #e74c3c;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #e74c3c;
+    color: white !important;
+}
+
+.auth-link {
+    display: flex;
+    align-items: center;
+}
+
 /* Main Content */
 main {
     padding: 2rem 0;

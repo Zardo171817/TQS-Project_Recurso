@@ -6,7 +6,17 @@ let pendingRedeemBenefitId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    // Auto-load redeem page if user is logged in as volunteer
+    autoLoadRedeemPage();
 });
+
+function autoLoadRedeemPage() {
+    const user = getUser();
+    if (user && user.userType === 'VOLUNTEER' && user.email) {
+        document.getElementById('volunteerEmail').value = user.email;
+        loadRedeemPage();
+    }
+}
 
 function setupEventListeners() {
     document.getElementById('loadRedeemPage').addEventListener('click', loadRedeemPage);

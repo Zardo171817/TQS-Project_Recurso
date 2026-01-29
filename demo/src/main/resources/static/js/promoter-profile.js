@@ -4,7 +4,19 @@ let currentProfile = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
+    // Auto-load profile if user is logged in as promoter
+    autoLoadProfile();
 });
+
+async function autoLoadProfile() {
+    const user = getUser();
+    if (user && user.userType === 'PROMOTER' && user.email) {
+        document.getElementById('searchEmail').value = user.email;
+        document.getElementById('profileEmail').value = user.email;
+        document.getElementById('profileName').value = user.name || '';
+        await handleSearch();
+    }
+}
 
 function setupEventListeners() {
     document.getElementById('profileForm').addEventListener('submit', handleFormSubmit);

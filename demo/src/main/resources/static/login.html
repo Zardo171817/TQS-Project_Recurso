@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Marketplace de Voluntariado</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">Voluntariado Marketplace</h1>
+            <ul class="nav-links">
+                <!-- Navigation links will be built dynamically by auth.js -->
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="form-container">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Login</h2>
+
+            <div id="message" class="message" style="display: none;"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    <span class="error-message" id="emailError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="A sua password">
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Entrar
+                </button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1.5rem; color: #7f8c8d;">
+                Não tem conta? <a href="/register.html" style="color: #3498db;">Registar-se</a>
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Voluntariado Marketplace. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // Redirect if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (isLoggedIn()) {
+                window.location.href = '/index.html';
+                return;
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Store user data in localStorage
+                    localStorage.setItem('user', JSON.stringify({
+                        id: data.id,
+                        name: data.name,
+                        email: data.email,
+                        userType: data.userType
+                    }));
+
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.display = 'block';
+
+                    // Redirect based on user type
+                    setTimeout(() => {
+                        const userType = data.userType;
+                        if (userType === 'VOLUNTEER') {
+                            // Check if volunteer has profile
+                            checkVolunteerProfile(data.email);
+                        } else if (userType === 'PROMOTER') {
+                            // Check if promoter has profile
+                            checkPromoterProfile(data.email);
+                        } else if (userType === 'PARTNER') {
+                            window.location.href = '/partner-benefits.html';
+                        } else {
+                            window.location.href = '/index.html';
+                        }
+                    }, 1000);
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Erro ao efetuar login. Tente novamente.';
+                messageDiv.style.display = 'block';
+            }
+        });
+
+        async function checkVolunteerProfile(email) {
+            try {
+                const response = await fetch('/api/volunteers/email/' + encodeURIComponent(email));
+                if (response.ok) {
+                    const volunteer = await response.json();
+                    localStorage.setItem('volunteerId', volunteer.id);
+                    window.location.href = '/index.html';
+                } else {
+                    // No profile yet, redirect to create profile
+                    window.location.href = '/volunteer-profile.html';
+                }
+            } catch (error) {
+                window.location.href = '/volunteer-profile.html';
+            }
+        }
+
+        async function checkPromoterProfile(email) {
+            try {
+                const response = await fetch('/api/promoters/email/' + encodeURIComponent(email));
+                if (response.ok) {
+                    const promoter = await response.json();
+                    localStorage.setItem('promoterId', promoter.id);
+                    window.location.href = '/index.html';
+                } else {
+                    // No profile yet, redirect to create profile
+                    window.location.href = '/promoter-profile.html';
+                }
+            } catch (error) {
+                window.location.href = '/promoter-profile.html';
+            }
+        }
+    </script>
+</body>
+</html>

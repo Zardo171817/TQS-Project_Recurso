@@ -5,7 +5,17 @@ let confirmedParticipations = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    // Auto-load points if user is logged in as volunteer
+    autoLoadPoints();
 });
+
+function autoLoadPoints() {
+    const user = getUser();
+    if (user && user.userType === 'VOLUNTEER' && user.email) {
+        document.getElementById('volunteerEmail').value = user.email;
+        loadVolunteerPoints();
+    }
+}
 
 function setupEventListeners() {
     document.getElementById('loadPoints').addEventListener('click', loadVolunteerPoints);

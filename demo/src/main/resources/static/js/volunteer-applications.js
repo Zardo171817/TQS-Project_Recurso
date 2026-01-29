@@ -5,7 +5,17 @@ let currentVolunteer = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    // Auto-load applications if user is logged in as volunteer
+    autoLoadApplications();
 });
+
+function autoLoadApplications() {
+    const user = getUser();
+    if (user && user.userType === 'VOLUNTEER' && user.email) {
+        document.getElementById('volunteerEmail').value = user.email;
+        loadVolunteerApplications();
+    }
+}
 
 function setupEventListeners() {
     document.getElementById('loadApplications').addEventListener('click', loadVolunteerApplications);
