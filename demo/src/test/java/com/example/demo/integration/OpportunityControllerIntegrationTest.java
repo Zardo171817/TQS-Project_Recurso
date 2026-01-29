@@ -32,10 +32,15 @@ class OpportunityControllerIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private VolunteerRepository volunteerRepository;
 
+    @Autowired
+    private RedemptionRepository redemptionRepository;
+
     private Promoter promoter;
 
     @BeforeEach
     void setUp() {
+        // Delete in correct order respecting foreign key constraints
+        redemptionRepository.deleteAll();
         applicationRepository.deleteAll();
         opportunityRepository.deleteAll();
         volunteerRepository.deleteAll();

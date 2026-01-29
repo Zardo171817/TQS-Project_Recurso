@@ -31,11 +31,16 @@ class ApplicationControllerIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private PromoterRepository promoterRepository;
 
+    @Autowired
+    private RedemptionRepository redemptionRepository;
+
     private Promoter promoter;
     private Opportunity opportunity;
 
     @BeforeEach
     void setUp() {
+        // Delete in correct order respecting foreign key constraints
+        redemptionRepository.deleteAll();
         applicationRepository.deleteAll();
         opportunityRepository.deleteAll();
         volunteerRepository.deleteAll();

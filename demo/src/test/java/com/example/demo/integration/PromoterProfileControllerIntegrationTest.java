@@ -1,6 +1,7 @@
 package com.example.demo.integration;
 
 import com.example.demo.dto.*;
+import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.OpportunityRepository;
 import com.example.demo.repository.PromoterRepository;
 import org.junit.jupiter.api.*;
@@ -25,8 +26,13 @@ class PromoterProfileControllerIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private OpportunityRepository opportunityRepository;
 
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
     @BeforeEach
     void setUp() {
+        // Delete in correct order respecting foreign key constraints
+        applicationRepository.deleteAll();
         opportunityRepository.deleteAll();
         promoterRepository.deleteAll();
     }

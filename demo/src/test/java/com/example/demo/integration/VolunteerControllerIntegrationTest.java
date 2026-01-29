@@ -3,6 +3,7 @@ package com.example.demo.integration;
 import com.example.demo.dto.*;
 import com.example.demo.entity.Volunteer;
 import com.example.demo.repository.ApplicationRepository;
+import com.example.demo.repository.RedemptionRepository;
 import com.example.demo.repository.VolunteerRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,13 @@ class VolunteerControllerIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private RedemptionRepository redemptionRepository;
+
     @BeforeEach
     void setUp() {
+        // Delete in correct order respecting foreign key constraints
+        redemptionRepository.deleteAll();
         applicationRepository.deleteAll();
         volunteerRepository.deleteAll();
     }
