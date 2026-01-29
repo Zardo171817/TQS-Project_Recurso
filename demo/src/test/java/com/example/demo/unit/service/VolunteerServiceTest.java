@@ -124,4 +124,81 @@ class VolunteerServiceTest {
         assertThat(volunteerService.existsByEmail("john@example.com")).isTrue();
         assertThat(volunteerService.existsByEmail("unknown@example.com")).isFalse();
     }
+
+    @Test
+    @DisplayName("Given non-existent email when getting volunteer by email then throw exception")
+    void givenNonExistentEmail_whenGettingVolunteerByEmail_thenThrowException() {
+        when(volunteerRepository.findByEmail("unknown@example.com")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> volunteerService.getVolunteerByEmail("unknown@example.com"))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Volunteer not found with email");
+    }
+
+    @Test
+    @DisplayName("Given non-existent volunteer ID when getting points then throw exception")
+    void givenNonExistentId_whenGettingVolunteerPoints_thenThrowException() {
+        when(volunteerRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> volunteerService.getVolunteerPoints(999L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Volunteer not found with id");
+    }
+
+    @Test
+    @DisplayName("Given valid limit when getting top volunteers then return limited list")
+    void givenValidLimit_whenGettingTopVolunteers_thenReturnLimitedList() {
+        when(volunteerRepository.findAll()).thenReturn(Arrays.asList(volunteer1, volunteer2));
+
+        List<VolunteerPointsResponse> topVolunteers = volunteerService.getTopVolunteers(1);
+
+        assertThat(topVolunteers).hasSize(1);
+        assertThat(topVolunteers.get(0).getTotalPoints()).isEqualTo(200);
+    }
+
+    @Test
+    @DisplayName("Given valid volunteer ID when getting confirmed participations then return applications")
+    void givenValidVolunteerId_whenGettingConfirmedParticipations_thenReturnApplications() {
+        when(volunteerRepository.existsById(1L)).thenReturn(true);
+        when(applicationRepository.findByVolunteerIdAndParticipationConfirmed(1L, true))
+                .thenReturn(Arrays.asList());
+
+        List<com.example.demo.dto.ApplicationResponse> participations =
+                volunteerService.getConfirmedParticipations(1L);
+
+        assertThat(participations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Given non-existent volunteer when getting confirmed participations then throw exception")
+    void givenNonExistentVolunteer_whenGettingConfirmedParticipations_thenThrowException() {
+        when(volunteerRepository.existsById(999L)).thenReturn(false);
+
+        assertThatThrownBy(() -> volunteerService.getConfirmedParticipations(999L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Volunteer not found with id");
+    }
+
+    @Test
+    @DisplayName("Given valid volunteer ID when getting points history then return history")
+    void givenValidVolunteerId_whenGettingPointsHistory_thenReturnHistory() {
+        when(volunteerRepository.existsById(1L)).thenReturn(true);
+        when(applicationRepository.findByVolunteerIdAndParticipationConfirmed(1L, true))
+                .thenReturn(Arrays.asList());
+
+        List<com.example.demo.dto.PointsHistoryResponse> history =
+                volunteerService.getPointsHistory(1L);
+
+        assertThat(history).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Given non-existent volunteer when getting points history then throw exception")
+    void givenNonExistentVolunteer_whenGettingPointsHistory_thenThrowException() {
+        when(volunteerRepository.existsById(999L)).thenReturn(false);
+
+        assertThatThrownBy(() -> volunteerService.getPointsHistory(999L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("Volunteer not found with id");
+    }
 }

@@ -88,34 +88,33 @@ const navConfig = {
     public: [
         { href: '/index.html', label: 'Início' },
         { href: '/opportunities.html', label: 'Oportunidades' },
-        { href: '/benefits-catalog.html', label: 'Catálogo Benefícios' },
+        { href: '/benefits-catalog.html', label: 'Benefícios' },
         { href: '/volunteer-ranking.html', label: 'Ranking' }
     ],
     VOLUNTEER: [
         { href: '/index.html', label: 'Início' },
+        { href: '/volunteer-profile.html', label: 'Meu Perfil' },
         { href: '/opportunities.html', label: 'Oportunidades' },
         { href: '/volunteer-applications.html', label: 'Minhas Candidaturas' },
-        { href: '/volunteer-profile.html', label: 'Meu Perfil' },
         { href: '/volunteer-points.html', label: 'Meus Pontos' },
-        { href: '/volunteer-points-history.html', label: 'Histórico Pontos' },
-        { href: '/benefits-catalog.html', label: 'Catálogo Benefícios' },
-        { href: '/redeem-points.html', label: 'Resgatar Pontos' },
+        { href: '/benefits-catalog.html', label: 'Benefícios' },
+        { href: '/redeem-points.html', label: 'Resgatar' },
         { href: '/volunteer-ranking.html', label: 'Ranking' }
     ],
     PROMOTER: [
         { href: '/index.html', label: 'Início' },
-        { href: '/opportunities.html', label: 'Oportunidades' },
+        { href: '/promoter-profile.html', label: 'Perfil Organização' },
         { href: '/create-opportunity.html', label: 'Criar Oportunidade' },
+        { href: '/volunteer-opportunities.html', label: 'Minhas Oportunidades' },
         { href: '/applications.html', label: 'Candidaturas' },
-        { href: '/promoter-profile.html', label: 'Meu Perfil' },
-        { href: '/conclude-opportunity.html', label: 'Concluir Oportunidade' },
+        { href: '/conclude-opportunity.html', label: 'Concluir' },
         { href: '/volunteer-ranking.html', label: 'Ranking' }
     ],
     PARTNER: [
         { href: '/index.html', label: 'Início' },
-        { href: '/benefits-catalog.html', label: 'Catálogo Benefícios' },
+        { href: '/benefits-catalog.html', label: 'Catálogo' },
         { href: '/partner-benefits.html', label: 'Meus Benefícios' },
-        { href: '/partner-redemptions.html', label: 'Ver Resgates' }
+        { href: '/partner-redemptions.html', label: 'Resgates' }
     ]
 };
 
@@ -193,7 +192,8 @@ function checkPageAccess() {
         '/create-opportunity.html',
         '/applications.html',
         '/promoter-profile.html',
-        '/conclude-opportunity.html'
+        '/conclude-opportunity.html',
+        '/volunteer-opportunities.html'
     ];
 
     const partnerPages = [

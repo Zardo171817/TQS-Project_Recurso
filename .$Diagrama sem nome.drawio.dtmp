@@ -1,0 +1,192 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
+  <diagram name="Página-1" id="II6UwDWbSIuDxtDJPosB">
+    <mxGraphModel dx="2426" dy="877" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-1" value="User" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-498" y="27" width="168" height="146" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-2" value="+id:Long&lt;div&gt;+name:String&lt;/div&gt;&lt;div&gt;+email:String&lt;div&gt;+usertype:Usertype&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+createdAt:LocalDateTime&lt;/div&gt;&lt;div&gt;+lastloginAt:&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;LocalDateTime&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+active:boolean&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="P_4PwitJ6TgKR7N4Pljm-1" vertex="1">
+          <mxGeometry y="30" width="168" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-5" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;UserType&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;VOLUNTEER&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;PROMOTER&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;PARTNER&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="-267" y="52.5" width="93" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-7" value="" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.011;entryY=0.658;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-2" target="P_4PwitJ6TgKR7N4Pljm-5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-105" y="328" as="sourcePoint" />
+            <mxPoint x="-185" y="328" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-9" value="Volunteer" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-93" y="25" width="189" height="177" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-10" value="+id:Long&lt;div&gt;+name:String&lt;/div&gt;&lt;div&gt;+email:String&lt;/div&gt;&lt;div&gt;+phone:String&lt;/div&gt;&lt;div&gt;+skills:String&lt;/div&gt;&lt;div&gt;+interests:String&lt;/div&gt;&lt;div&gt;+availability:String&lt;/div&gt;&lt;div&gt;+bio:String&lt;br&gt;&lt;div&gt;+totalpoints:Integer&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+profileCreatedAt:LocalDateTime&lt;/div&gt;&lt;div&gt;+profileUpdatedAt:LocalDateTime&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="P_4PwitJ6TgKR7N4Pljm-9" vertex="1">
+          <mxGeometry y="30" width="189" height="147" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-11" value="Application" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-221" y="320" width="189" height="182" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-13" value="+ id: Long&#xa;+ volunteer: Volunteer&#xa;+ opportunity: Opportunity&#xa;+ status: ApplicationStatus&#xa;+ motivation: String&#xa;+ appliedAt: LocalDateTime&#xa;+ participationConfirmed: Boolean&#xa;+ pointsAwarded: Integer&#xa;+ confirmedAt: LocalDateTime" style="text;whiteSpace=wrap;" parent="P_4PwitJ6TgKR7N4Pljm-11" vertex="1">
+          <mxGeometry y="30" width="189" height="152" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-14" value="Redemption" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="25" y="320" width="189" height="131" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-15" value="&lt;div&gt;+ id: Long&lt;/div&gt;&lt;div&gt;+ volunteer: Volunteer&lt;/div&gt;&lt;div&gt;+ benefit: Benefit&lt;/div&gt;&lt;div&gt;+ pointsSpent: Integer&lt;/div&gt;&lt;div&gt;+ status: RedemptionStatus&lt;/div&gt;&lt;div&gt;+ redeemedAt: LocalDateTime&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="P_4PwitJ6TgKR7N4Pljm-14" vertex="1">
+          <mxGeometry y="30" width="189" height="101" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-16" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.492;exitY=0.993;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-10" target="P_4PwitJ6TgKR7N4Pljm-11" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="157" y="419" as="sourcePoint" />
+            <mxPoint x="207" y="369" as="targetPoint" />
+            <Array as="points">
+              <mxPoint y="271" />
+              <mxPoint x="-126" y="271" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-17" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" target="P_4PwitJ6TgKR7N4Pljm-14" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-1" y="205" as="sourcePoint" />
+            <mxPoint x="207" y="369" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-1" y="270" />
+              <mxPoint x="120" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-18" value="Opportunity" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-335" y="698" width="189" height="215" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-19" value="+ id: Long&#xa;+ title: String&#xa;+ description: String&#xa;+ skills: String&#xa;+ category: String&#xa;+ duration: Integer&#xa;+ vacancies: Integer&#xa;+ points: Integer&#xa;+ status: OpportunityStatus&#xa;+ promoter: Promoter&#xa;+ createdAt: LocalDateTime&#xa;+ concludedAt: LocalDateTime" style="text;whiteSpace=wrap;" parent="P_4PwitJ6TgKR7N4Pljm-18" vertex="1">
+          <mxGeometry y="30" width="189" height="185" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-20" value="Promoter" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-494" y="323" width="189" height="287" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-21" value="+ id: Long&#xa;+ name: String&#xa;+ email: String&#xa;+ organization: String&#xa;+ description: String&#xa;+ phone: String&#xa;+ website: String&#xa;+ address: String&#xa;+ logoUrl: String&#xa;+ organizationType: String&#xa;+ areaOfActivity: String&#xa;+ foundedYear: String&#xa;+ numberOfEmployees: String&#xa;+ socialMedia: String&#xa;+ profileCreatedAt: LocalDateTime&#xa;+ profileUpdatedAt: LocalDateTime&#xa;+ opportunities: List&lt;Opportunity&gt;" style="text;whiteSpace=wrap;" parent="P_4PwitJ6TgKR7N4Pljm-20" vertex="1">
+          <mxGeometry y="30" width="189" height="257" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-22" value="Benefit" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="116" y="562" width="189" height="167" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-23" value="&lt;div&gt;+ id: Long&lt;/div&gt;&lt;div&gt;+ name: String&lt;/div&gt;&lt;div&gt;+ description: String&lt;/div&gt;&lt;div&gt;+ pointsRequired: Integer&lt;/div&gt;&lt;div&gt;+ category: BenefitCategory&lt;/div&gt;&lt;div&gt;+ provider: String&lt;/div&gt;&lt;div&gt;+ imageUrl: String&lt;/div&gt;&lt;div&gt;+ active: Boolean&lt;/div&gt;&lt;div&gt;+ createdAt: LocalDateTime&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="P_4PwitJ6TgKR7N4Pljm-22" vertex="1">
+          <mxGeometry y="30" width="189" height="137" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-24" value="Partner" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="459" y="364" width="189" height="246" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-25" value="&lt;div&gt;+ id: Long&lt;/div&gt;&lt;div&gt;+ name: String&lt;/div&gt;&lt;div&gt;+ email: String&lt;/div&gt;&lt;div&gt;+ company: String&lt;/div&gt;&lt;div&gt;+ description: String&lt;/div&gt;&lt;div&gt;+ phone: String&lt;/div&gt;&lt;div&gt;+ website: String&lt;/div&gt;&lt;div&gt;+ address: String&lt;/div&gt;&lt;div&gt;+ logoUrl: String&lt;/div&gt;&lt;div&gt;+ contactPerson: String&lt;/div&gt;&lt;div&gt;+ profileCreatedAt: LocalDateTime&lt;/div&gt;&lt;div&gt;+ profileUpdatedAt: LocalDateTime&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="P_4PwitJ6TgKR7N4Pljm-24" vertex="1">
+          <mxGeometry y="30" width="189" height="216" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-26" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;OpportunityStatus&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;OPEN&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;CONCLUDED&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="216" y="59" width="117" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-27" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;ApplictionStatus&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;PENDING&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;REJECTED&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;ACCEPTED&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="378" y="59" width="108" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-28" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;BenefitCattegory&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;UA&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;PARTNER&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="520" y="59" width="101" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-29" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;RedemptionStatus&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;REJECTED&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;CANCELED&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
+          <mxGeometry x="669" y="59" width="113" height="81" as="geometry" />
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-30" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-13" target="P_4PwitJ6TgKR7N4Pljm-18" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-83" y="637" as="sourcePoint" />
+            <mxPoint x="-33" y="587" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-129" y="672" />
+              <mxPoint x="-240" y="672" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-31" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-21" target="P_4PwitJ6TgKR7N4Pljm-18" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-83" y="637" as="sourcePoint" />
+            <mxPoint x="-221" y="725" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-399" y="672" />
+              <mxPoint x="-240" y="672" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-32" value="" style="endArrow=classic;html=1;rounded=0;entryX=-0.005;entryY=0.445;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.471;exitY=1.02;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-15" target="P_4PwitJ6TgKR7N4Pljm-23" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-83" y="484" as="sourcePoint" />
+            <mxPoint x="-33" y="434" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-33" value="" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;entryX=1;entryY=0.423;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.545;exitY=1.005;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-25" target="P_4PwitJ6TgKR7N4Pljm-23" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="456" y="629" as="sourcePoint" />
+            <mxPoint x="-98" y="459" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="562" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-34" value="" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-19" target="P_4PwitJ6TgKR7N4Pljm-26" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="333" y="813" as="sourcePoint" />
+            <mxPoint x="315" y="660" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1" y="821" />
+              <mxPoint x="1" y="516" />
+              <mxPoint x="275" y="516" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-35" value="" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-22" target="P_4PwitJ6TgKR7N4Pljm-28" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110" y="566" as="sourcePoint" />
+            <mxPoint x="30" y="566" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="211" y="534" />
+              <mxPoint x="386" y="532" />
+              <mxPoint x="386" y="348" />
+              <mxPoint x="571" y="348" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-36" value="" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=1.005;exitY=0.366;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-15" target="P_4PwitJ6TgKR7N4Pljm-29" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="111" y="454" as="sourcePoint" />
+            <mxPoint x="31" y="454" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="350" y="387" />
+              <mxPoint x="348" y="302" />
+              <mxPoint x="539" y="298" />
+              <mxPoint x="728" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P_4PwitJ6TgKR7N4Pljm-37" value="" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="P_4PwitJ6TgKR7N4Pljm-13" target="P_4PwitJ6TgKR7N4Pljm-27" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="119" y="454" as="sourcePoint" />
+            <mxPoint x="438" y="161" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-2" y="426" />
+              <mxPoint x="1" y="284" />
+              <mxPoint x="432" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xXFTu4Vg3m7Ancuuk0OZ-1" value="Usa" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-330" y="77" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xXFTu4Vg3m7Ancuuk0OZ-2" value="Submete&lt;div&gt;1..*&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-116" y="230" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xXFTu4Vg3m7Ancuuk0OZ-3" value="Resgata&lt;div&gt;1..*&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="29" y="228" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xXFTu4Vg3m7Ancuuk0OZ-4" value="Refere-se a&lt;div&gt;1..*&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-221" y="630.5" width="74" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
