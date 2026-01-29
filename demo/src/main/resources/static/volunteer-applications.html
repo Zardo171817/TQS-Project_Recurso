@@ -211,25 +211,28 @@
     <main class="container">
         <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Minhas Candidaturas</h2>
 
-        <div class="volunteer-login">
+        <div id="volunteerLogin" class="volunteer-login" style="display: none;">
             <h3>Identificar Voluntario</h3>
             <div class="volunteer-login-row">
                 <div class="filter-group">
                     <label for="volunteerEmail">Email do Voluntario:</label>
                     <input type="email" id="volunteerEmail" class="form-control" placeholder="Digite seu email">
                 </div>
-                <div class="filter-group">
-                    <label for="statusFilter">Filtrar por Status:</label>
-                    <select id="statusFilter" class="form-control">
-                        <option value="">Todos os Status</option>
-                        <option value="PENDING">Pendente</option>
-                        <option value="ACCEPTED">Aceite</option>
-                        <option value="REJECTED">Rejeitado</option>
-                    </select>
-                </div>
                 <div class="filter-group filter-buttons">
                     <button id="loadApplications" class="btn btn-primary">Ver Candidaturas</button>
                 </div>
+            </div>
+        </div>
+
+        <div class="filter-section" style="background: white; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 1.5rem;">
+            <div class="filter-group">
+                <label for="statusFilter">Filtrar por Status:</label>
+                <select id="statusFilter" class="form-control">
+                    <option value="">Todos os Status</option>
+                    <option value="PENDING">Pendente</option>
+                    <option value="ACCEPTED">Aceite</option>
+                    <option value="REJECTED">Rejeitado</option>
+                </select>
             </div>
         </div>
 

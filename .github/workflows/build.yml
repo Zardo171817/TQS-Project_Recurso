@@ -39,3 +39,16 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+
+  deploy:
+    name: Deploy
+    runs-on: self-hosted
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy with Docker Compose
+        working-directory: ./demo
+        run: |
+          docker-compose down
+          docker-compose up -d --build

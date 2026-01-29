@@ -198,8 +198,8 @@
     <main class="container">
         <h2 style="margin-bottom: 1.5rem; color: #2c3e50;">Concluir Oportunidade e Confirmar Participantes</h2>
 
-        <div class="promoter-select">
-            <h3>Selecione o Promotor e a Oportunidade</h3>
+        <div id="promoterSelectSection" class="promoter-select" style="display: none;">
+            <h3>Selecione o Promotor</h3>
             <div class="promoter-select-row">
                 <div class="filter-group">
                     <label for="promoterSelect">Promotor:</label>
@@ -207,6 +207,12 @@
                         <option value="">Selecione um promotor</option>
                     </select>
                 </div>
+            </div>
+        </div>
+
+        <div class="opportunity-select" style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 2rem;">
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">Selecione a Oportunidade</h3>
+            <div class="promoter-select-row">
                 <div class="filter-group">
                     <label for="opportunitySelect">Oportunidade (Aberta):</label>
                     <select id="opportunitySelect" class="form-control" disabled>
