@@ -6,6 +6,7 @@ import com.example.demo.entity.Benefit.BenefitCategory;
 import com.example.demo.entity.Redemption;
 import com.example.demo.entity.Redemption.RedemptionStatus;
 import com.example.demo.entity.Volunteer;
+import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.BenefitRepository;
 import com.example.demo.repository.RedemptionRepository;
 import com.example.demo.repository.VolunteerRepository;
@@ -34,12 +35,16 @@ class RedemptionControllerIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private VolunteerRepository volunteerRepository;
 
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
     private Volunteer volunteer;
     private Benefit benefit;
 
     @BeforeEach
     void setUp() {
         redemptionRepository.deleteAll();
+        applicationRepository.deleteAll();
         benefitRepository.deleteAll();
         volunteerRepository.deleteAll();
 
