@@ -73,6 +73,7 @@ class RedemptionServiceTest {
         redemption.setStatus(RedemptionStatus.COMPLETED);
     }
 
+    //resgate
     @Test
     @DisplayName("Should redeem points successfully")
     void shouldRedeemPointsSuccessfully() {

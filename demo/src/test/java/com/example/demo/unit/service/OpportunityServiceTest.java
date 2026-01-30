@@ -84,6 +84,7 @@ class OpportunityServiceTest {
     @DisplayName("Should create opportunity successfully")
     void shouldCreateOpportunitySuccessfully() {
         when(promoterRepository.findById(1L)).thenReturn(Optional.of(promoter));
+        //gravação funciona?
         when(opportunityRepository.save(any(Opportunity.class))).thenAnswer(invocation -> {
             Opportunity o = invocation.getArgument(0);
             o.setId(1L);
@@ -192,6 +193,7 @@ class OpportunityServiceTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
+    //Este teste verifica a filtragem de oportunidades por categoria
     @Test
     @DisplayName("Given opportunity filter when filtering opportunities then return filtered list")
     void givenOpportunityFilter_whenFiltering_thenReturnFilteredList() {
@@ -207,6 +209,7 @@ class OpportunityServiceTest {
         assertThat(responses.get(0).getCategory()).isEqualTo("Environment");
     }
 
+    //Este teste verifica a filtragem de oportunidades com múltiplos parâmetros (categoria, skills, duração)
     @Test
     @DisplayName("Given filter params when filtering opportunities then return filtered list")
     void givenFilterParams_whenFiltering_thenReturnFilteredList() {
@@ -219,6 +222,7 @@ class OpportunityServiceTest {
         assertThat(responses).hasSize(1);
     }
 
+    //Este teste verifica a listagem de todas as categorias de oportunidades existentes.
     @Test
     @DisplayName("Given existing opportunities when getting all categories then return categories")
     void givenExistingOpportunities_whenGettingAllCategories_thenReturnCategories() {
@@ -230,6 +234,7 @@ class OpportunityServiceTest {
         assertThat(categories).contains("Environment", "Education");
     }
 
+    //Este teste verifica a atualização de uma oportunidade existente
     @Test
     @DisplayName("Given valid update request when updating opportunity then return updated opportunity")
     void givenValidUpdateRequest_whenUpdating_thenReturnUpdatedOpportunity() {
@@ -251,6 +256,7 @@ class OpportunityServiceTest {
         verify(opportunityRepository).save(any(Opportunity.class));
     }
 
+    //Este teste verifica que ao tentar atualizar uma oportunidade inexistente é lançada uma exceção
     @Test
     @DisplayName("Given non-existent ID when updating opportunity then throw exception")
     void givenNonExistentId_whenUpdating_thenThrowException() {
@@ -261,6 +267,7 @@ class OpportunityServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
+    //Este teste verifica que ao tentar apagar uma oportunidade inexistente é lançada uma exceção
     @Test
     @DisplayName("Given non-existent ID when deleting opportunity then throw exception")
     void givenNonExistentId_whenDeleting_thenThrowException() {
@@ -270,6 +277,7 @@ class OpportunityServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
+    //Este teste verifica que não se pode concluir uma oportunidade já concluída
     @Test
     @DisplayName("Given already concluded opportunity when concluding then throw exception")
     void givenAlreadyConcluded_whenConcluding_thenThrowException() {
@@ -285,6 +293,7 @@ class OpportunityServiceTest {
                 .hasMessageContaining("already concluded");
     }
 
+    //Este teste verifica que só se pode concluir oportunidades com candidaturas aceites
     @Test
     @DisplayName("Given non-accepted application when concluding then throw exception")
     void givenNonAcceptedApplication_whenConcluding_thenThrowException() {
@@ -305,6 +314,7 @@ class OpportunityServiceTest {
                 .hasMessageContaining("accepted applications");
     }
 
+    //Este teste verifica a confirmação de participação de um voluntário numa oportunidade
     @Test
     @DisplayName("Given valid application when confirming participation then return confirmed application")
     void givenValidApplication_whenConfirmingParticipation_thenReturnConfirmedApplication() {
@@ -331,6 +341,7 @@ class OpportunityServiceTest {
         verify(volunteerRepository).save(any(Volunteer.class));
     }
 
+    //Este teste verifica que apenas o promotor que criou a oportunidade pode confirmar participações
     @Test
     @DisplayName("Given non-owner when confirming participation then throw exception")
     void givenNonOwner_whenConfirmingParticipation_thenThrowException() {
@@ -345,6 +356,7 @@ class OpportunityServiceTest {
                 .hasMessageContaining("promoter who created");
     }
 
+    //Este teste verifica que só se pode confirmar participação em candidaturas aceites
     @Test
     @DisplayName("Given non-accepted application when confirming participation then throw exception")
     void givenNonAcceptedApplication_whenConfirmingParticipation_thenThrowException() {
@@ -360,6 +372,7 @@ class OpportunityServiceTest {
                 .hasMessageContaining("accepted applications");
     }
 
+    //Este teste verifica que não se pode confirmar uma participação já confirmada
     @Test
     @DisplayName("Given already confirmed application when confirming participation then throw exception")
     void givenAlreadyConfirmed_whenConfirmingParticipation_thenThrowException() {
@@ -376,6 +389,7 @@ class OpportunityServiceTest {
                 .hasMessageContaining("already confirmed");
     }
 
+    //Este teste verifica a filtragem de oportunidades por status
     @Test
     @DisplayName("Given valid status when getting opportunities by status then return filtered list")
     void givenValidStatus_whenGettingOpportunitiesByStatus_thenReturnFilteredList() {
@@ -387,6 +401,7 @@ class OpportunityServiceTest {
         assertThat(responses).hasSize(1);
     }
 
+    //Este teste verifica a filtragem de oportunidades por promotor e status
     @Test
     @DisplayName("Given valid promoter and status when getting opportunities then return filtered list")
     void givenValidPromoterAndStatus_whenGettingOpportunities_thenReturnFilteredList() {
@@ -400,6 +415,7 @@ class OpportunityServiceTest {
         assertThat(responses).hasSize(1);
     }
 
+    //Este teste verifica que ao buscar oportunidades de um promotor inexistente é lançada uma exceção
     @Test
     @DisplayName("Given non-existent promoter when getting opportunities by status then throw exception")
     void givenNonExistentPromoter_whenGettingOpportunitiesByStatus_thenThrowException() {
@@ -409,6 +425,7 @@ class OpportunityServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
+    //Este teste verifica a listagem de candidaturas aceites de uma oportunidade
     @Test
     @DisplayName("Given valid opportunity ID when getting accepted applications then return applications")
     void givenValidOpportunityId_whenGettingAcceptedApplications_thenReturnApplications() {
@@ -421,6 +438,7 @@ class OpportunityServiceTest {
         assertThat(responses).isEmpty();
     }
 
+    //Este teste verifica que ao buscar candidaturas aceites de uma oportunidade inexistente é lançada uma exceção
     @Test
     @DisplayName("Given non-existent opportunity when getting accepted applications then throw exception")
     void givenNonExistentOpportunity_whenGettingAcceptedApplications_thenThrowException() {
@@ -430,6 +448,7 @@ class OpportunityServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
+    //Este teste verifica a contagem de oportunidades concluídas de um promotor
     @Test
     @DisplayName("Given valid promoter ID when counting concluded opportunities then return count")
     void givenValidPromoterId_whenCountingConcludedOpportunities_thenReturnCount() {
@@ -441,6 +460,7 @@ class OpportunityServiceTest {
         assertThat(count).isEqualTo(5L);
     }
 
+    //Este teste verifica que ao contar oportunidades concluídas de um promotor inexistente é lançada uma exceção
     @Test
     @DisplayName("Given non-existent promoter when counting concluded opportunities then throw exception")
     void givenNonExistentPromoter_whenCountingConcludedOpportunities_thenThrowException() {
@@ -450,6 +470,7 @@ class OpportunityServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
+    //Este teste verifica que não se pode criar uma oportunidade sem um promotor válido
     @Test
     @DisplayName("Given non-existent promoter when creating opportunity then throw exception")
     void givenNonExistentPromoter_whenCreatingOpportunity_thenThrowException() {
@@ -460,6 +481,7 @@ class OpportunityServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class);
     }
 
+    //Este teste verifica que ao buscar oportunidades de um promotor inexistente é lançada uma exceção
     @Test
     @DisplayName("Given non-existent promoter when getting opportunities by promoter then throw exception")
     void givenNonExistentPromoter_whenGettingOpportunitiesByPromoter_thenThrowException() {
