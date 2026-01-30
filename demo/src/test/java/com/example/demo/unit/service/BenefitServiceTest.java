@@ -117,7 +117,8 @@ class BenefitServiceTest {
         request.setDescription("Description");
         request.setPointsRequired(50);
         request.setProvider("Provider");
-
+        
+        //gravação funciona?
         when(benefitRepository.save(any(Benefit.class))).thenAnswer(invocation -> {
             Benefit b = invocation.getArgument(0);
             b.setId(1L);

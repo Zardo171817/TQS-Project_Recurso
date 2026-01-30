@@ -27,6 +27,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+
+/*"Este teste valida a lógica de negócio do ApplicationService, que
+gere as candidaturas de voluntários a oportunidades."*/
+
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ApplicationService Unit Tests")
 class ApplicationServiceTest {
